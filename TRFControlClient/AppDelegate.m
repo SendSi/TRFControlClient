@@ -21,9 +21,16 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
-    TRFMainUIViewController *trfMain=[[TRFMainUIViewController alloc] init];
-    TRFConnectControl *trfConn=[[TRFConnectControl alloc ] init];
-    self.window.rootViewController=trfConn;
+    NSString *strIP=[[NSUserDefaults standardUserDefaults] objectForKey:@"ipAddress"];
+    NSString *strPort=[[NSUserDefaults standardUserDefaults] objectForKey:@"portAddress"];
+    UIViewController *conNext=nil;
+    if([strIP isEqualToString:@""]==NO&&[strPort isEqualToString:@""]==NO){
+     conNext=[[TRFMainUIViewController alloc] init];
+    }
+    else{
+   conNext=[[TRFConnectControl alloc ] init];
+    }
+    self.window.rootViewController=conNext;
     [self.window makeKeyAndVisible];
     
     return YES;
