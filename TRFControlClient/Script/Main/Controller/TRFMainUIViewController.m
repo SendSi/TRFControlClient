@@ -7,6 +7,7 @@
 //
 
 #import "TRFMainUIViewController.h"
+#import "UIBarButtonItem+vhBarButtonTool.h"
 
 @interface TRFMainUIViewController ()
 
@@ -16,9 +17,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+self.navigationItem.rightBarButtonItem=[UIBarButtonItem initWithBarButtonNorTitle:@"测试" target:self action:@selector(hjExit)];
 }
-
+-(void)hjExit{
+    pchLogClass;
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

@@ -23,14 +23,17 @@
     self.window.backgroundColor = [UIColor whiteColor];
     NSString *strIP=[[NSUserDefaults standardUserDefaults] objectForKey:@"ipAddress"];
     NSString *strPort=[[NSUserDefaults standardUserDefaults] objectForKey:@"portAddress"];
-    UIViewController *conNext=nil;
+
     if([strIP isEqualToString:@""]==NO&&[strPort isEqualToString:@""]==NO){
-     conNext=[[TRFMainUIViewController alloc] init];
+       TRFMainUIViewController   * conNext=[[TRFMainUIViewController alloc] init];
+        UINavigationController *nav=[[UINavigationController alloc] initWithRootViewController:conNext];
+          self.window.rootViewController=nav;
     }
     else{
-   conNext=[[TRFConnectControl alloc ] init];
+TRFConnectControl   *conNext=[[TRFConnectControl alloc ] init];
+            self.window.rootViewController=conNext;
     }
-    self.window.rootViewController=conNext;
+
     [self.window makeKeyAndVisible];
     
     return YES;

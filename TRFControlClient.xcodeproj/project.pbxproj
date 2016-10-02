@@ -15,6 +15,7 @@
 		2D3A85CE1D9FBD50004DF475 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2D3A85C71D9FBD50004DF475 /* SVProgressHUD.bundle */; };
 		2D3A85CF1D9FBD50004DF475 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A85C91D9FBD50004DF475 /* SVProgressHUD.m */; };
 		2D3A85D01D9FBD50004DF475 /* SVRadialGradientLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A85CB1D9FBD50004DF475 /* SVRadialGradientLayer.m */; };
+		2D3A85D31DA0B15D004DF475 /* UIBarButtonItem+vhBarButtonTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A85D21DA0B15D004DF475 /* UIBarButtonItem+vhBarButtonTool.m */; };
 		2D3B813C1D9F73470028B3A2 /* TRFMainUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3B813A1D9F73470028B3A2 /* TRFMainUIViewController.m */; };
 		2D3B813D1D9F73470028B3A2 /* TRFMainUIViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D3B813B1D9F73470028B3A2 /* TRFMainUIViewController.xib */; };
 		2D3B81411D9F8BBA0028B3A2 /* TRFConnectControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3B813F1D9F8BBA0028B3A2 /* TRFConnectControl.m */; };
@@ -60,6 +61,8 @@
 		2D3A85C91D9FBD50004DF475 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
 		2D3A85CA1D9FBD50004DF475 /* SVRadialGradientLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVRadialGradientLayer.h; sourceTree = "<group>"; };
 		2D3A85CB1D9FBD50004DF475 /* SVRadialGradientLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVRadialGradientLayer.m; sourceTree = "<group>"; };
+		2D3A85D11DA0B15D004DF475 /* UIBarButtonItem+vhBarButtonTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+vhBarButtonTool.h"; sourceTree = "<group>"; };
+		2D3A85D21DA0B15D004DF475 /* UIBarButtonItem+vhBarButtonTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+vhBarButtonTool.m"; sourceTree = "<group>"; };
 		2D3B81391D9F73470028B3A2 /* TRFMainUIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRFMainUIViewController.h; sourceTree = "<group>"; };
 		2D3B813A1D9F73470028B3A2 /* TRFMainUIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRFMainUIViewController.m; sourceTree = "<group>"; };
 		2D3B813B1D9F73470028B3A2 /* TRFMainUIViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TRFMainUIViewController.xib; sourceTree = "<group>"; };
@@ -108,6 +111,8 @@
 		2D3A85BC1D9FBD04004DF475 /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				2D3A85D11DA0B15D004DF475 /* UIBarButtonItem+vhBarButtonTool.h */,
+				2D3A85D21DA0B15D004DF475 /* UIBarButtonItem+vhBarButtonTool.m */,
 				2D3A85C11D9FBD50004DF475 /* SVProgressHUD */,
 				2D3A85BD1D9FBD4C004DF475 /* TRFControlPCH.pch */,
 				2D3A85BE1D9FBD4C004DF475 /* UIView+vhRectExtension.h */,
@@ -414,6 +419,7 @@
 			files = (
 				2D3A85C01D9FBD4C004DF475 /* UIView+vhRectExtension.m in Sources */,
 				2D3B813C1D9F73470028B3A2 /* TRFMainUIViewController.m in Sources */,
+				2D3A85D31DA0B15D004DF475 /* UIBarButtonItem+vhBarButtonTool.m in Sources */,
 				2D3B81411D9F8BBA0028B3A2 /* TRFConnectControl.m in Sources */,
 				2D069B991D9FAC8E00B7BBA1 /* TRFAlert.m in Sources */,
 				2D870B321D9F655900FD90E5 /* AppDelegate.m in Sources */,
