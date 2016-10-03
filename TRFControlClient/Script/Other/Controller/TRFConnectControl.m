@@ -9,6 +9,7 @@
 #import "TRFConnectControl.h"
 #import "TRFAlert.h"
 #import "SVProgressHUD.h"
+#import "UIBarButtonItem+vhBarButtonTool.h"
 
 @interface TRFConnectControl ()<UITextFieldDelegate>
 
@@ -18,7 +19,16 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    self.title =@"设置";
+        self.navigationItem.leftBarButtonItem=[UIBarButtonItem initWithBarButtonNorTitle:@"取消" titleColor:[UIColor blackColor] target:self action:@selector(Click_Cancel)];
+    
     [self getUserDefaultsInfo];//NSUserDefaults
+}
+
+-(void)Click_Cancel{
+    [self dismissViewControllerAnimated:YES completion:^{
+        pchLogClass;
+    }];
 }
 
 - (void)viewDidLoad {
@@ -33,7 +43,7 @@
     self.textField_Device.delegate=self;
     [self.buttonOpenCom addTarget:self action:@selector(clickOpenCom) forControlEvents:UIControlEventTouchUpInside];
     [self.buttonCloseCom addTarget:self action:@selector(clickCloseCom) forControlEvents:UIControlEventTouchUpInside ];
-    [self.buttonSaveInfo addTarget:self action:@selector(clickSaveInfo) forControlEvents:UIControlEventTouchUpInside];
+   self.navigationItem.rightBarButtonItem= [UIBarButtonItem initWithBarButtonNorTitle:@"保存" target:self action:@selector(clickSaveInfo)];
 }
 /** 关机 点击事件  */
 -(void)clickCloseCom{
@@ -80,7 +90,7 @@
     }
     
     
-//去除空格 保存
+       //去除空格 保存
         self.textField_IP.text=removeTrim(self.textField_IP.text);
         self.textField_Device.text=removeTrim(self.textField_Device.text);
         self.textField_MACAddress.text=removeTrim(self.textField_MACAddress.text);
@@ -91,11 +101,12 @@
         [useDef setObject:self.textField_Device.text forKey:@"devAddress"];
         [useDef setObject:self.textField_Port.text  forKey:@"portAddress"];
         [useDef synchronize];
-
+    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+        [SVProgressHUD showSuccessWithStatus:@"保存成功"];
+    }];
 }
 
--(Boolean)validInput:(NSString *)regexMac inputContent:(NSString *)inputContent{
-    
+-(Boolean)validInput:(NSString *)regexMac inputContent:(NSString *)inputContent{    
     NSPredicate *predicateMac = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regexMac];
     BOOL isValidMac= [predicateMac evaluateWithObject:inputContent];
     return isValidMac;
@@ -104,10 +115,10 @@
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField{
     if(textField==self.textField_IP){
-        self.view.y -= 100;
+        self.view.y -= 60;
     }
     else {
-        self.view.y -=200;
+        self.view.y -=160;
     }
 }
 

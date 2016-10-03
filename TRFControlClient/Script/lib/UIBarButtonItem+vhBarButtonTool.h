@@ -12,7 +12,8 @@
 
 +(instancetype)initWithBarButtonNorImage:(NSString *)norImage highImage:(NSString *)highImage target:(id)target action:(SEL) action;
 
-//+(instancetype)initWithBarButtonNorImage:(NSString *)norImage highImage:(NSString *)highImage showString:(NSString *)showTitle target:(id)target action:(SEL) ction;
++(instancetype)initWithBarButtonNorImage:(NSString *)norImage highImage:(NSString *)highImage showTitle:(NSString *)showTitle target:(id)target action:(SEL) action;
+
 /** uibarButtonItem的创建  只有文字 黑色字*/
 +(instancetype)initWithBarButtonNorTitle:(NSString *)norTitle target:(id)target action:(SEL) action;
 

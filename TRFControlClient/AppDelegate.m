@@ -10,7 +10,9 @@
 #import "TRFMainUIViewController.h"
 #import "TRFConnectControl.h"
 
-@interface AppDelegate ()
+@interface AppDelegate (){
+
+}
 
 @end
 
@@ -21,18 +23,13 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
-    NSString *strIP=[[NSUserDefaults standardUserDefaults] objectForKey:@"ipAddress"];
-    NSString *strPort=[[NSUserDefaults standardUserDefaults] objectForKey:@"portAddress"];
 
-    if([strIP isEqualToString:@""]==NO&&[strPort isEqualToString:@""]==NO){
+
+
        TRFMainUIViewController   * conNext=[[TRFMainUIViewController alloc] init];
         UINavigationController *nav=[[UINavigationController alloc] initWithRootViewController:conNext];
           self.window.rootViewController=nav;
-    }
-    else{
-TRFConnectControl   *conNext=[[TRFConnectControl alloc ] init];
-            self.window.rootViewController=conNext;
-    }
+
 
     [self.window makeKeyAndVisible];
     

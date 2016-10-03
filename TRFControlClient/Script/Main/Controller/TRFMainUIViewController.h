@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+@class AsyncSocket;
 /** 主面板  */
 @interface TRFMainUIViewController : UIViewController
+
 
 @end

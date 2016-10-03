@@ -18,7 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonCloseCom;
 /** 开机按钮  */
 @property (weak, nonatomic) IBOutlet UIButton *buttonOpenCom;
-@property (weak, nonatomic) IBOutlet UIButton *buttonSaveInfo;
+
 
 
 

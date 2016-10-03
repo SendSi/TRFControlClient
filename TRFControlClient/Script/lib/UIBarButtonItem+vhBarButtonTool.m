@@ -14,16 +14,22 @@
     UIButton *button=[[UIButton alloc] init];
     [button setImage:[UIImage imageNamed:norImage] forState:UIControlStateNormal];
     [button setImage:[UIImage imageNamed:highImage] forState:UIControlStateHighlighted];
-    button.size=button.currentImage.size;
+    button.size=CGSizeMake(100, 60);
     [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     return [[self alloc] initWithCustomView:button];
 }
 
 
 
-//+(instancetype)initWithBarButtonNorImage:(NSString *)norImage highImage:(NSString *)highImage showString:(NSString *)showTitle target:(id)target action:(SEL) action{
-//
-//}
++(instancetype)initWithBarButtonNorImage:(NSString *)norImage highImage:(NSString *)highImage showTitle:(NSString *)showTitle target:(id)target action:(SEL) action{
+    UIButton *button=[[UIButton alloc] init];
+    [button setTitle:showTitle forState:UIControlStateNormal];
+    [button setImage:[UIImage imageNamed:norImage] forState:UIControlStateNormal];
+    [button setImage:[UIImage imageNamed:highImage] forState:UIControlStateHighlighted];
+    button.size=button.currentImage.size;
+    [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+    return [[self alloc] initWithCustomView:button];
+}
 
 /** uibarButtonItem的创建  只有文字 黑色字*/
 +(instancetype)initWithBarButtonNorTitle:(NSString *)norTitle target:(id)target action:(SEL) action{

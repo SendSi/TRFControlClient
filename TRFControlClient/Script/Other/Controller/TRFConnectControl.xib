@@ -10,7 +10,6 @@
             <connections>
                 <outlet property="buttonCloseCom" destination="egJ-Kl-46o" id="7eO-OG-kif"/>
                 <outlet property="buttonOpenCom" destination="iQV-Mp-c6J" id="ACZ-2a-gXY"/>
-                <outlet property="buttonSaveInfo" destination="8VP-O5-PCx" id="haN-Fg-pg6"/>
                 <outlet property="textField_Device" destination="DnB-cG-GY8" id="f5g-8h-q7C"/>
                 <outlet property="textField_IP" destination="kqp-RF-WFL" id="cu9-YP-Lk9"/>
                 <outlet property="textField_MACAddress" destination="U56-HX-5mE" id="6gn-WD-sgK"/>
@@ -166,31 +165,10 @@
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8VP-O5-PCx">
-                            <constraints>
-                                <constraint firstAttribute="height" constant="80" id="HAx-tv-22D"/>
-                                <constraint firstAttribute="width" constant="130" id="T3C-wu-haD"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="40"/>
-                            <state key="normal" title="保存">
-                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                    <integer key="value" value="10"/>
-                                </userDefinedRuntimeAttribute>
-                                <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                    <integer key="value" value="2"/>
-                                </userDefinedRuntimeAttribute>
-                                <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
-                                    <color key="value" red="1" green="0.22165777344205106" blue="0.097141562143582827" alpha="1" colorSpace="calibratedRGB"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                        </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sanchuantianlogo" translatesAutoresizingMaskIntoConstraints="NO" id="bzH-Qu-edb">
                             <constraints>
-                                <constraint firstAttribute="height" constant="80" id="6xR-gt-bb0"/>
-                                <constraint firstAttribute="width" constant="200" id="vQp-JG-Blx"/>
+                                <constraint firstAttribute="height" constant="45" id="6xR-gt-bb0"/>
+                                <constraint firstAttribute="width" constant="150" id="vQp-JG-Blx"/>
                             </constraints>
                         </imageView>
                     </subviews>
@@ -199,9 +177,7 @@
                         <constraint firstItem="dYn-Ke-CM0" firstAttribute="leading" secondItem="vRE-GK-8YT" secondAttribute="trailing" id="0Gn-B3-q1A"/>
                         <constraint firstItem="vRE-GK-8YT" firstAttribute="top" secondItem="sdE-HU-yVx" secondAttribute="top" id="8Ts-sA-mED"/>
                         <constraint firstItem="dYn-Ke-CM0" firstAttribute="top" secondItem="sdE-HU-yVx" secondAttribute="top" id="9SP-sL-ih9"/>
-                        <constraint firstAttribute="trailing" secondItem="8VP-O5-PCx" secondAttribute="trailing" constant="46" id="9ZD-Bc-LCk"/>
                         <constraint firstItem="iQV-Mp-c6J" firstAttribute="centerX" secondItem="sdE-HU-yVx" secondAttribute="centerX" constant="150" id="Ase-ve-6Bx"/>
-                        <constraint firstItem="8VP-O5-PCx" firstAttribute="top" secondItem="sdE-HU-yVx" secondAttribute="top" constant="25" id="FHu-w6-6Y4"/>
                         <constraint firstAttribute="trailing" secondItem="dYn-Ke-CM0" secondAttribute="trailing" id="IMz-62-ZnW"/>
                         <constraint firstItem="iQV-Mp-c6J" firstAttribute="bottom" secondItem="egJ-Kl-46o" secondAttribute="bottom" id="LjF-YY-iHw"/>
                         <constraint firstItem="iQV-Mp-c6J" firstAttribute="top" secondItem="egJ-Kl-46o" secondAttribute="top" id="Stq-0y-eXb"/>
@@ -209,7 +185,7 @@
                         <constraint firstItem="vRE-GK-8YT" firstAttribute="leading" secondItem="sdE-HU-yVx" secondAttribute="leading" id="ZNF-St-FzV"/>
                         <constraint firstAttribute="bottom" secondItem="dYn-Ke-CM0" secondAttribute="bottom" id="dG9-46-Hqf"/>
                         <constraint firstAttribute="bottom" secondItem="egJ-Kl-46o" secondAttribute="bottom" constant="90" id="jaz-gL-A4D"/>
-                        <constraint firstItem="bzH-Qu-edb" firstAttribute="top" secondItem="sdE-HU-yVx" secondAttribute="top" constant="20" id="lEr-g2-4m8"/>
+                        <constraint firstItem="bzH-Qu-edb" firstAttribute="top" secondItem="sdE-HU-yVx" secondAttribute="top" constant="60" id="lEr-g2-4m8"/>
                         <constraint firstItem="bzH-Qu-edb" firstAttribute="centerX" secondItem="sdE-HU-yVx" secondAttribute="centerX" id="q1D-vb-dBQ"/>
                         <constraint firstAttribute="bottom" secondItem="vRE-GK-8YT" secondAttribute="bottom" id="wBu-kY-JCI"/>
                     </constraints>
