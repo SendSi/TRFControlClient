@@ -29,7 +29,7 @@
 @property (weak,nonatomic) UIButton  *buttonLeft;
 /** app.plist 的内容 */
 @property (nonatomic ,strong ) AppDelegate *myDelegate;
-
+@property (nonatomic ,strong ) TRFDevShowController *devController;
 
 @property (nonatomic,strong) NSMutableArray *listname;
 @property (nonatomic,strong) NSMutableArray *listindex;
@@ -123,7 +123,6 @@
     pchLogClass;
     TRFConnectControl *conn=[[TRFConnectControl alloc] init];
     [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:conn] animated:YES completion:^{
-        pchLogClass;
     }];
 }
 /** 设备 按钮 主页*/
@@ -163,6 +162,7 @@
     if([buttonText isEqualToString:@"设备列表"])
     {
         TRFDevShowController *vcController=[[TRFDevShowController alloc] init];
+        self.devController=vcController;
         [self.navigationController pushViewController:vcController animated:YES];
     }
 }
@@ -281,16 +281,18 @@
             {
                 bHideReset = NO;
             }
-            NSLog(@"[xmlPaserWithXMLDeviceQueryReq] name=%@,reset=%@", [[[ele elementsForName:@"Name"] objectAtIndex:0] stringValue],
-                  [[[ele elementsForName:@"Reset"] objectAtIndex:0] stringValue]);
         }
     }
+    NSLogs(@"首次 进入 name=%@,state=%@",name,state);
+
     
     self.listname = name;
     self.listindex = index;
     self.liststate = state;
     self.listdate=nsdate;
-// //   [self.listTableView reloadData] ;
+////   [self.listTableView reloadData] ;
+ 
+    [self.devController loadInfoArray_listName:self.listname listIndex:self.listindex listState:self.liststate listDate:self.listdate];
 }
 
 - (void)xmlPaserWithXMLPlayQueryReq:(NSString *)xml
@@ -321,6 +323,7 @@
 
 - (void)xmlPaserWithXMLDeviceCtrlReq:(NSString *)xml
 {
+    
     GDataXMLDocument *document  = [[GDataXMLDocument alloc] initWithXMLString:xml options:0 error:nil] ;
     //取出xml的根节点
     GDataXMLElement* rootElement = [document rootElement];

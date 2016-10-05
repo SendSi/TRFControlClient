@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TRFDevShowController : UIViewController
+@interface TRFDevShowController : UITableViewController
+
+
+-(void)loadInfoArray_listName:(NSArray *)listName listIndex:(NSArray *)listIndex listState:(NSArray *)listState listDate:(NSArray *)listDate;
 
 @end

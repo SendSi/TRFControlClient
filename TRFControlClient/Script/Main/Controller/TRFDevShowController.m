@@ -12,13 +12,23 @@
 #import "SVProgressHUD.h"
 #import "GDataXMLNode.h"
 #import "AsyncSocket.h"
+#import "TRFDevShowTableViewCell.h"
 
-@interface TRFDevShowController ()<AsyncSocketDelegate>
-/** trfMain   */
+@interface TRFDevShowController ()<AsyncSocketDelegate,UITableViewDelegate,UITableViewDataSource>
+/** appDelegate   */
 @property (strong,nonatomic) AppDelegate *myDelegate;
-
+/** trfMain   */
+@property (strong,nonatomic) TRFMainUIViewController *trfMain;
 /** async   */
 @property (strong,nonatomic) AsyncSocket *devSendSocket;
+
+/** listName   */
+@property (strong,nonatomic) NSMutableArray  *listName;
+/** listIndex   */
+@property (strong,nonatomic) NSMutableArray  *listIndex;
+/** listState   */
+@property (strong,nonatomic) NSMutableArray  *listState;
+
 @end
 
 @implementation TRFDevShowController
@@ -28,13 +38,25 @@
     self.myDelegate=myDelegate;
     
     self.title=@"设备列表";
+    
     [super viewDidLoad];
+    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TRFDevShowTableViewCell class]) bundle:nil] forCellReuseIdentifier:@"TRFDevShowTableViewCell"];
     [self loadInfoAsync];
 }
 
+-(void)loadInfoArray_listName:(NSArray *)listName listIndex:(NSArray *)listIndex listState:(NSArray *)listState listDate:(NSArray *)listDate{
+    [SVProgressHUD dismiss];
+    NSLogs(@"刷新 数据==%@",listName);
+    self.listName=(NSMutableArray *)listName;
+    self.listState=(NSMutableArray *)listState;
+    self.listIndex=(NSMutableArray *)listIndex;
+    [self.tableView reloadData];
+}
+
+
+
 -(void)loadInfoAsync{
     self.myDelegate.connecttype= @"DeviceQueryReq";
-    
     if (self.myDelegate.isDevicetablelist)
     {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -58,8 +80,8 @@
             //等待提示
             [SVProgressHUD show];
             //设备查询
-            //NSString *xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>DeviceQueryReq</CmdID><From>%@</From></Header><Body><Index>0</Index></Body></Packet>",_index.text];
-            NSString *xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>DeviceQueryReq</CmdID><From>6689</From></Header><Body><Index>0</Index></Body></Packet>"];
+            NSString *devAddress=[[NSUserDefaults standardUserDefaults] objectForKey:@"devAddress"];
+            NSString *xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>DeviceQueryReq</CmdID><From>%@</From></Header><Body><Index>0</Index></Body></Packet>",devAddress];
             NSData *data = [xmlstr dataUsingEncoding: NSUTF8StringEncoding];
             
             [self willConnect];
@@ -82,61 +104,26 @@
     NSLogs(@"dev 代理==onSocket:didWriteDataWithTag:  %s %d, tag = %ld", __FUNCTION__, __LINE__, tag);
     [self.myDelegate.sendSocket readDataWithTimeout: -1 tag: 0];
 }
-// 这里必须要使用流式数据
-- (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
-{
-    pchLogClass;
-    NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);  NSString *message = [[NSString alloc] initWithData:data encoding:enc];
-    NSLogs(@"这里必须要使用流式数据dev is: \n%@",message);
-    
-    self.myDelegate.xmlcacle =[self.myDelegate.xmlcacle stringByAppendingString:message];
-   if (tag==2) {
-        [ self.myDelegate.sendSocket disconnect];
-    }
-    //是否包结尾
-    if ([self.myDelegate.xmlcacle hasSuffix:@"</Packet>"]){
-          if ([ self.myDelegate.connecttype isEqualToString:@"DeviceQueryReq"]){
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setObject:self.myDelegate.xmlcacle forKey:@"Devicetablelist"];
-             self.myDelegate.isDevicetablelist=YES;
-            //设备查询
-            NSLogs(@"==========设备查询===========");
-            [self xmlPaserWithXMLDeviceQueryReq:self.myDelegate.xmlcacle];
-        }
-    }
-      [self.myDelegate.sendSocket readDataWithTimeout: -1 tag: 0];
-}
-
 
 #pragma mark - 关于xml 方法
 - (void)xmlPaserWithXMLDeviceQueryReq:(NSString *)xml
 {
     GDataXMLDocument *document  = [[GDataXMLDocument alloc] initWithXMLString:xml options:0 error:nil] ;
     GDataXMLElement *rootElement = [document rootElement];
-    
-    NSMutableArray *index =[[NSMutableArray alloc] init];
-    NSMutableArray *name =[[NSMutableArray alloc] init];
-    NSMutableArray *state =[[NSMutableArray alloc] init];
     NSMutableArray *nsdate=[[NSMutableArray alloc]init];
-    BOOL bHideReset = YES;
     for(GDataXMLElement *element in [rootElement elementsForName:@"Body"])
     {
         for(id ele in [element elementsForName:@"Device"])
         {
-            [index addObject:[[[ele elementsForName:@"Index"] objectAtIndex:0] stringValue]];
-            [name addObject:[[[ele elementsForName:@"Name"] objectAtIndex:0] stringValue]];
-            [state addObject:[[[ele elementsForName:@"State"] objectAtIndex:0] stringValue]];
+            [self.listIndex addObject:[[[ele elementsForName:@"Index"] objectAtIndex:0] stringValue]];
+            [self.listName addObject:[[[ele elementsForName:@"Name"] objectAtIndex:0] stringValue]];
+            [self.listState addObject:[[[ele elementsForName:@"State"] objectAtIndex:0] stringValue]];
             NSDate *date=[[NSDate date] initWithTimeIntervalSinceNow:10];
             [nsdate addObject:date];
-            NSString* strReset = [[[ele elementsForName:@"Reset"] objectAtIndex:0] stringValue];
-            if ([strReset isEqualToString:@"1"])
-            {
-                bHideReset = NO;
-            }
-            NSLogs(@"[xmlPaserWithXMLDeviceQueryReq] name=%@,reset=%@", [[[ele elementsForName:@"Name"] objectAtIndex:0] stringValue],
-                  [[[ele elementsForName:@"Reset"] objectAtIndex:0] stringValue]);
         }
     }
+    NSLogs(@"再次进入");
+    [self.tableView reloadData];
 }
 
 /** 连接的代码  */
@@ -179,7 +166,62 @@
 }
 
 
+#pragma mark -   懒加载
+-(NSMutableArray *)listName{
+    if(_listName==nil){        _listName=[NSMutableArray array];    }
+    return _listName;
+}
+-(NSMutableArray *)listState{
+    if(_listState==nil){        _listState=[NSMutableArray array];    }
+    return _listState;
+}
+-(NSMutableArray *)listIndex{
+    if(_listIndex==nil){        _listIndex=[NSMutableArray array];    }
+    return _listIndex;
+}
 
+#pragma mark -   UITableView 的代理们
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    TRFDevShowTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TRFDevShowTableViewCell"];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    if(self.listName.count>0)
+    {
+        cell.labelName.text=self.listName[indexPath.section];
+        cell.buttonPic.tag=[self.listIndex[indexPath.section] integerValue];
+        // 1.已开启,所以展示 关闭按钮      0.已关闭,民示  开启按钮
+        NSInteger nsState=[self.listState[indexPath.section] integerValue];
+        if(nsState==0){//list_off  list_on
+            [cell.buttonPic setImage:[UIImage imageNamed:@"list_on"] forState:UIControlStateNormal];
+            [cell.buttonPic setImage:[UIImage imageNamed:@"list_on"] forState:UIControlStateHighlighted];
+        }else{
+            [cell.buttonPic setImage:[UIImage imageNamed:@"list_off"] forState:UIControlStateNormal];
+            [cell.buttonPic setImage:[UIImage imageNamed:@"list_off"] forState:UIControlStateHighlighted];
+        }
+    }
+    
+    return cell;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 1;
+}
+
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+    return self.listName.count;
+}
+
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 100;
+}
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 3;
+}
 
 
 

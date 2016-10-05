@@ -13,7 +13,6 @@
 		2D33DE951DA0E5E4009903B8 /* TRFShowButtonV.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D33DE941DA0E5E4009903B8 /* TRFShowButtonV.m */; };
 		2D33DE971DA0E5F0009903B8 /* TRFShowButtonV.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D33DE961DA0E5F0009903B8 /* TRFShowButtonV.xib */; };
 		2D33DE9B1DA0F2BA009903B8 /* TRFDevShowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D33DE991DA0F2BA009903B8 /* TRFDevShowController.m */; };
-		2D33DE9C1DA0F2BA009903B8 /* TRFDevShowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D33DE9A1DA0F2BA009903B8 /* TRFDevShowController.xib */; };
 		2D33DE9F1DA0F7BC009903B8 /* TRFGlobalFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D33DE9E1DA0F7BC009903B8 /* TRFGlobalFile.m */; };
 		2D33DEA91DA107F6009903B8 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D33DEA81DA107F6009903B8 /* AsyncSocket.m */; };
 		2D33DEAF1DA20635009903B8 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D33DEAE1DA20635009903B8 /* GCDAsyncUdpSocket.m */; };
@@ -43,6 +42,10 @@
 		2D870B3A1D9F655900FD90E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D870B391D9F655900FD90E5 /* Assets.xcassets */; };
 		2D870B481D9F655900FD90E5 /* TRFControlClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D870B471D9F655900FD90E5 /* TRFControlClientTests.m */; };
 		2D870B531D9F655900FD90E5 /* TRFControlClientUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D870B521D9F655900FD90E5 /* TRFControlClientUITests.m */; };
+		2DB7880C1DA4A4DB0035D6A9 /* Foundation+Log.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB7880B1DA4A4DB0035D6A9 /* Foundation+Log.m */; };
+		2DB788101DA4A7E70035D6A9 /* TRFDevShowTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB7880E1DA4A7E70035D6A9 /* TRFDevShowTableViewCell.m */; };
+		2DB788111DA4A7E70035D6A9 /* TRFDevShowTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DB7880F1DA4A7E70035D6A9 /* TRFDevShowTableViewCell.xib */; };
+		2DB788141DA4AA420035D6A9 /* TRFDevShowModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB788131DA4AA420035D6A9 /* TRFDevShowModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,7 +75,6 @@
 		2D33DE961DA0E5F0009903B8 /* TRFShowButtonV.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TRFShowButtonV.xib; sourceTree = "<group>"; };
 		2D33DE981DA0F2BA009903B8 /* TRFDevShowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRFDevShowController.h; sourceTree = "<group>"; };
 		2D33DE991DA0F2BA009903B8 /* TRFDevShowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRFDevShowController.m; sourceTree = "<group>"; };
-		2D33DE9A1DA0F2BA009903B8 /* TRFDevShowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TRFDevShowController.xib; sourceTree = "<group>"; };
 		2D33DE9D1DA0F7BC009903B8 /* TRFGlobalFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRFGlobalFile.h; sourceTree = "<group>"; };
 		2D33DE9E1DA0F7BC009903B8 /* TRFGlobalFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRFGlobalFile.m; sourceTree = "<group>"; };
 		2D33DEA71DA107F6009903B8 /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncSocket.h; sourceTree = "<group>"; };
@@ -124,6 +126,12 @@
 		2D870B4E1D9F655900FD90E5 /* TRFControlClientUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TRFControlClientUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D870B521D9F655900FD90E5 /* TRFControlClientUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TRFControlClientUITests.m; sourceTree = "<group>"; };
 		2D870B541D9F655900FD90E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2DB7880B1DA4A4DB0035D6A9 /* Foundation+Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Foundation+Log.m"; sourceTree = "<group>"; };
+		2DB7880D1DA4A7E70035D6A9 /* TRFDevShowTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRFDevShowTableViewCell.h; sourceTree = "<group>"; };
+		2DB7880E1DA4A7E70035D6A9 /* TRFDevShowTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRFDevShowTableViewCell.m; sourceTree = "<group>"; };
+		2DB7880F1DA4A7E70035D6A9 /* TRFDevShowTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TRFDevShowTableViewCell.xib; sourceTree = "<group>"; };
+		2DB788121DA4AA420035D6A9 /* TRFDevShowModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRFDevShowModel.h; sourceTree = "<group>"; };
+		2DB788131DA4AA420035D6A9 /* TRFDevShowModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRFDevShowModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +208,7 @@
 		2D3A85BC1D9FBD04004DF475 /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				2DB7880B1DA4A4DB0035D6A9 /* Foundation+Log.m */,
 				2D33DEB01DA22FF1009903B8 /* xml */,
 				2D33DEA01DA10652009903B8 /* Async */,
 				2D3A85D11DA0B15D004DF475 /* UIBarButtonItem+vhBarButtonTool.h */,
@@ -258,7 +267,6 @@
 				2D3B813B1D9F73470028B3A2 /* TRFMainUIViewController.xib */,
 				2D33DE981DA0F2BA009903B8 /* TRFDevShowController.h */,
 				2D33DE991DA0F2BA009903B8 /* TRFDevShowController.m */,
-				2D33DE9A1DA0F2BA009903B8 /* TRFDevShowController.xib */,
 				2D33DE9D1DA0F7BC009903B8 /* TRFGlobalFile.h */,
 				2D33DE9E1DA0F7BC009903B8 /* TRFGlobalFile.m */,
 			);
@@ -268,6 +276,8 @@
 		2D3B812E1D9F6C180028B3A2 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				2DB788121DA4AA420035D6A9 /* TRFDevShowModel.h */,
+				2DB788131DA4AA420035D6A9 /* TRFDevShowModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -278,6 +288,9 @@
 				2D33DE931DA0E5E4009903B8 /* TRFShowButtonV.h */,
 				2D33DE941DA0E5E4009903B8 /* TRFShowButtonV.m */,
 				2D33DE961DA0E5F0009903B8 /* TRFShowButtonV.xib */,
+				2DB7880D1DA4A7E70035D6A9 /* TRFDevShowTableViewCell.h */,
+				2DB7880E1DA4A7E70035D6A9 /* TRFDevShowTableViewCell.m */,
+				2DB7880F1DA4A7E70035D6A9 /* TRFDevShowTableViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -489,8 +502,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DB788111DA4A7E70035D6A9 /* TRFDevShowTableViewCell.xib in Resources */,
 				2D3A85CE1D9FBD50004DF475 /* SVProgressHUD.bundle in Resources */,
-				2D33DE9C1DA0F2BA009903B8 /* TRFDevShowController.xib in Resources */,
 				2D069B9A1D9FAC8E00B7BBA1 /* TRFAlert.xib in Resources */,
 				2D3B813D1D9F73470028B3A2 /* TRFMainUIViewController.xib in Resources */,
 				2D870B3A1D9F655900FD90E5 /* Assets.xcassets in Resources */,
@@ -526,6 +539,8 @@
 				2D33DE9B1DA0F2BA009903B8 /* TRFDevShowController.m in Sources */,
 				2D3A85D31DA0B15D004DF475 /* UIBarButtonItem+vhBarButtonTool.m in Sources */,
 				2D3B81411D9F8BBA0028B3A2 /* TRFConnectControl.m in Sources */,
+				2DB788141DA4AA420035D6A9 /* TRFDevShowModel.m in Sources */,
+				2DB7880C1DA4A4DB0035D6A9 /* Foundation+Log.m in Sources */,
 				2D069B991D9FAC8E00B7BBA1 /* TRFAlert.m in Sources */,
 				2D33DEA91DA107F6009903B8 /* AsyncSocket.m in Sources */,
 				2D870B321D9F655900FD90E5 /* AppDelegate.m in Sources */,
@@ -538,6 +553,7 @@
 				2D33DE9F1DA0F7BC009903B8 /* TRFGlobalFile.m in Sources */,
 				2D33DE951DA0E5E4009903B8 /* TRFShowButtonV.m in Sources */,
 				2D3A85D01D9FBD50004DF475 /* SVRadialGradientLayer.m in Sources */,
+				2DB788101DA4A7E70035D6A9 /* TRFDevShowTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
