@@ -33,7 +33,7 @@
 #define pchScreenHeight [UIScreen mainScreen].bounds.size.height
 #define  pchScreenWidth_2_1 pchScreenWidth*0.5//2分之一的长度
 
-#define pchLogClass NSLogs(@"输出本类-->%s",__func__)//输出本类
+#define pchLogClass NSLogs(@"输出([类名 方法名])-->%s",__func__)//输出本类
 #define removeTrim(txt) [txt stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];//去除空格
 #define removeTrimGetLength(txt) [txt stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length;//去除空格
 

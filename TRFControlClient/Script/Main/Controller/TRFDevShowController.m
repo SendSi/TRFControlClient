@@ -7,21 +7,15 @@
 //
 
 #import "TRFDevShowController.h"
-#import "TRFMainUIViewController.h"
 #import "AppDelegate.h"
 #import "SVProgressHUD.h"
 #import "GDataXMLNode.h"
-#import "AsyncSocket.h"
 #import "TRFDevShowTableViewCell.h"
+#import "AsyncSocket.h"
 
-@interface TRFDevShowController ()<AsyncSocketDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface TRFDevShowController ()<UITableViewDelegate,UITableViewDataSource,TRFDevShowTableViewCellDelegate>
 /** appDelegate   */
 @property (strong,nonatomic) AppDelegate *myDelegate;
-/** trfMain   */
-@property (strong,nonatomic) TRFMainUIViewController *trfMain;
-/** async   */
-@property (strong,nonatomic) AsyncSocket *devSendSocket;
-
 /** listName   */
 @property (strong,nonatomic) NSMutableArray  *listName;
 /** listIndex   */
@@ -38,34 +32,32 @@
     self.myDelegate=myDelegate;
     
     self.title=@"设备列表";
+    self.view.backgroundColor=pchColor(16, 17, 18);
     
     [super viewDidLoad];
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([TRFDevShowTableViewCell class]) bundle:nil] forCellReuseIdentifier:@"TRFDevShowTableViewCell"];
     [self loadInfoAsync];
 }
-
+/** 首次 进入 列表 加载的 数据   */
 -(void)loadInfoArray_listName:(NSArray *)listName listIndex:(NSArray *)listIndex listState:(NSArray *)listState listDate:(NSArray *)listDate{
     [SVProgressHUD dismiss];
-    NSLogs(@"刷新 数据==%@",listName);
     self.listName=(NSMutableArray *)listName;
     self.listState=(NSMutableArray *)listState;
     self.listIndex=(NSMutableArray *)listIndex;
     [self.tableView reloadData];
 }
 
-
-
 -(void)loadInfoAsync{
     self.myDelegate.connecttype= @"DeviceQueryReq";
     if (self.myDelegate.isDevicetablelist)
     {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *Devicetablelist = [userDefaults objectForKey:@"Devicetablelist"];
+        NSString *Devicetablelist = [userDefaults stringForKey:@"Devicetablelist"];
+        
         //设备查询
         [self xmlPaserWithXMLDeviceQueryReq:Devicetablelist];
     }
-    else
-    {
+    else{
         if (!self.myDelegate.connectOK)
         {
             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"系统提示"
@@ -83,26 +75,13 @@
             NSString *devAddress=[[NSUserDefaults standardUserDefaults] objectForKey:@"devAddress"];
             NSString *xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>DeviceQueryReq</CmdID><From>%@</From></Header><Body><Index>0</Index></Body></Packet>",devAddress];
             NSData *data = [xmlstr dataUsingEncoding: NSUTF8StringEncoding];
-            
-            [self willConnect];
+        
             if (self.myDelegate.connectOK)
             {
                 [self.myDelegate.sendSocket writeData: data withTimeout: -1 tag: 0];
             }
         }
     }
-}
-#pragma mark - tcp onSocket
-- (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
-{
-    NSLogs(@"dev 代理socket 连接成功%s %d", __FUNCTION__, __LINE__);
-    [SVProgressHUD showSuccessWithStatus:@"连接中控成功"];
-    [self.myDelegate.sendSocket readDataWithTimeout: -1 tag: 0];
-}
-- (void)onSocket:(AsyncSocket *)sock didWriteDataWithTag:(long)tag
-{
-    NSLogs(@"dev 代理==onSocket:didWriteDataWithTag:  %s %d, tag = %ld", __FUNCTION__, __LINE__, tag);
-    [self.myDelegate.sendSocket readDataWithTimeout: -1 tag: 0];
 }
 
 #pragma mark - 关于xml 方法
@@ -122,49 +101,9 @@
             [nsdate addObject:date];
         }
     }
-    NSLogs(@"再次进入");
+    NSLogs(@"第二次+  进入 列表 ");
     [self.tableView reloadData];
 }
-
-/** 连接的代码  */
--(void)willConnect{
-    if (!self.myDelegate.sendSocket)
-    {
-        NSUserDefaults *useDef=[NSUserDefaults standardUserDefaults];
-        NSString *ipAddress=    [useDef objectForKey:@"ipAddress"];
-        NSString *portAddress=[useDef objectForKey:@"portAddress"];
-        NSString *devAddress=[useDef objectForKey:@"devAddress"];
-        
-        if (ipAddress.length>0&&portAddress.length>0&&devAddress.length>0)
-        {
-            self.myDelegate.connecttype=@"VerifyReq";
-            self.myDelegate.sendSocket= [[AsyncSocket alloc] initWithDelegate: self] ;
-            NSError *error;
-            self.myDelegate.connectOK = [self.myDelegate.sendSocket connectToHost: ipAddress onPort: [portAddress intValue]  error: &error];
-            [self.myDelegate.sendSocket setRunLoopModes:[NSArray arrayWithObject:NSRunLoopCommonModes]];
-            [SVProgressHUD show];
-        }else {
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"系统提示"
-                                                           message:@"请先设置中控参数和设备标示！"
-                                                          delegate:self
-                                                 cancelButtonTitle:@"确 定"
-                                                 otherButtonTitles:nil];
-            [alert show];
-        }
-    }
-}
-
-/** 断开的连接  的代码  */
--(void)willDisConnect{
-    [self.myDelegate.sendSocket setDelegate:nil];
-    [self.myDelegate.sendSocket disconnect];
-    self.myDelegate.connectOK=NO;
-    self.myDelegate.isPlaytablelist=NO;
-    self.myDelegate.isDevicetablelist=NO;
-    self.myDelegate.sendSocket = nil;
-    [SVProgressHUD showSuccessWithStatus:@"断开中控成功"];
-}
-
 
 #pragma mark -   懒加载
 -(NSMutableArray *)listName{
@@ -183,24 +122,10 @@
 #pragma mark -   UITableView 的代理们
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     TRFDevShowTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TRFDevShowTableViewCell"];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    if(self.listName.count>0)
-    {
-        cell.labelName.text=self.listName[indexPath.section];
-        cell.buttonPic.tag=[self.listIndex[indexPath.section] integerValue];
-        // 1.已开启,所以展示 关闭按钮      0.已关闭,民示  开启按钮
-        NSInteger nsState=[self.listState[indexPath.section] integerValue];
-        if(nsState==0){//list_off  list_on
-            [cell.buttonPic setImage:[UIImage imageNamed:@"list_on"] forState:UIControlStateNormal];
-            [cell.buttonPic setImage:[UIImage imageNamed:@"list_on"] forState:UIControlStateHighlighted];
-        }else{
-            [cell.buttonPic setImage:[UIImage imageNamed:@"list_off"] forState:UIControlStateNormal];
-            [cell.buttonPic setImage:[UIImage imageNamed:@"list_off"] forState:UIControlStateHighlighted];
-        }
-    }
-    
+    [cell loadDataInfo:self.listName[indexPath.section] tag:[self.listIndex[indexPath.section] integerValue] state:[self.listState[indexPath.section] integerValue]];
+    cell.delegateCell=self;
     return cell;
 }
 
@@ -212,20 +137,44 @@
     return self.listName.count;
 }
 
-
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 100;
 }
-
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     return 3;
 }
 
 
+#pragma  mark - cell 里面的 代理
+-(void)devShowTableViewCellClickRight:(TRFDevShowTableViewCell *)vc tag:(NSInteger)tag{//right也就关闭 按钮
+    NSString *rowValue = [NSString stringWithFormat:@"%ld",tag];
+    NSString *xmlstr=nil;
+    NSString *devStr=[[NSUserDefaults standardUserDefaults] objectForKey:@"devAddress"];
+    //等待提示
+    [SVProgressHUD show];
+    if (([self.myDelegate.connecttype isEqualToString:@"DeviceQueryReq"])||([self.myDelegate.connecttype isEqualToString:@"DeviceCtrlReq"])){
+        self.myDelegate.connecttype= @"DeviceCtrlReq";
+        //设备查询
+        xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>%@</CmdID><From>%@</From></Header><Body><Index>%@</Index><State>0</State></Body></Packet>",self.myDelegate.connecttype,devStr, rowValue];
+    }else {
+       self.myDelegate.connecttype= @"PlayReq";
+        //播放请求
+        xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>%@</CmdID><From>%@</From></Header><Body><Index>%@</Index></Body></Packet>",@"PlayStopReq",devStr, rowValue];
+        
+    }
+    NSData *data = [xmlstr dataUsingEncoding: NSUTF8StringEncoding];
+    // [xmlstr release];
+    
+    if (self.myDelegate.connectOK)
+    {
+        [self.myDelegate.sendSocket writeData: data withTimeout: -1 tag: 0];
+    }
+}
 
-
+-(void)devShowTableViewCellClickLeftOpen:(TRFDevShowTableViewCell *)vc tag:(NSInteger)tag{
+    pchLogClass;
+}
 
 
 

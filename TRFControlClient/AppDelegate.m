@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "TRFMainUIViewController.h"
-#import "TRFConnectControl.h"
+#import "TRFNavigationController.h"
 
 @interface AppDelegate (){
 
@@ -24,12 +24,9 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
 
-
-
        TRFMainUIViewController   * conNext=[[TRFMainUIViewController alloc] init];
-        UINavigationController *nav=[[UINavigationController alloc] initWithRootViewController:conNext];
+        TRFNavigationController *nav=[[TRFNavigationController alloc] initWithRootViewController:conNext];
           self.window.rootViewController=nav;
-
 
     [self.window makeKeyAndVisible];
     

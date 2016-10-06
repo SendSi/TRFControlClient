@@ -18,15 +18,20 @@
 @implementation TRFConnectControl
 
 -(void)viewWillAppear:(BOOL)animated{
+        UINavigationBar *bar = [self.navigationController navigationBar];
+        CGFloat navBarHeight = 80;
+        CGRect frame = CGRectMake(0, 0, pchScreenWidth, navBarHeight);
+        [bar setFrame:frame];
+    
     [super viewWillAppear:animated];
     self.title =@"设置";
-        self.navigationItem.leftBarButtonItem=[UIBarButtonItem initWithBarButtonNorTitle:@"取消" titleColor:[UIColor blackColor] target:self action:@selector(Click_Cancel)];
+    self.navigationItem.leftBarButtonItem=[UIBarButtonItem initWithBarButtonNorTitle:@"取消" titleColor:[UIColor blackColor] target:self action:@selector(Click_Cancel)];
     
     [self getUserDefaultsInfo];//NSUserDefaults
 }
 
 -(void)Click_Cancel{
-    [self dismissViewControllerAnimated:YES completion:^{
+    [self dismissViewControllerAnimated:NO completion:^{
         pchLogClass;
     }];
 }
@@ -43,7 +48,7 @@
     self.textField_Device.delegate=self;
     [self.buttonOpenCom addTarget:self action:@selector(clickOpenCom) forControlEvents:UIControlEventTouchUpInside];
     [self.buttonCloseCom addTarget:self action:@selector(clickCloseCom) forControlEvents:UIControlEventTouchUpInside ];
-   self.navigationItem.rightBarButtonItem= [UIBarButtonItem initWithBarButtonNorTitle:@"保存" target:self action:@selector(clickSaveInfo)];
+    self.navigationItem.rightBarButtonItem= [UIBarButtonItem initWithBarButtonNorTitle:@"保存" target:self action:@selector(clickSaveInfo)];
 }
 /** 关机 点击事件  */
 -(void)clickCloseCom{
@@ -83,30 +88,30 @@
         [SVProgressHUD showErrorWithStatus:@"端口号不可用,请检查"];
         return ;
     }
-    //判断 端口号 可用性
-    if([self validInput:@"[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]" inputContent:self.textField_MACAddress.text]==NO){
-        [SVProgressHUD showErrorWithStatus:@"Mac地址不可用,请检查"];
-        return ;
-    }
+    //判断 mac 可用性
+    //    if([self validInput:@"[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]" inputContent:self.textField_MACAddress.text]==NO){
+    //        [SVProgressHUD showErrorWithStatus:@"Mac地址不可用,请检查"];
+    //        return ;
+    //    }
     
     
-       //去除空格 保存
-        self.textField_IP.text=removeTrim(self.textField_IP.text);
-        self.textField_Device.text=removeTrim(self.textField_Device.text);
-        self.textField_MACAddress.text=removeTrim(self.textField_MACAddress.text);
-        self.textField_Port.text=removeTrim(self.textField_Port.text);
-        NSUserDefaults *useDef= [NSUserDefaults standardUserDefaults];
-        [useDef setObject:self.textField_IP.text forKey:@"ipAddress"];
-        [useDef setObject:self.textField_MACAddress.text forKey:@"macAddress"];
-        [useDef setObject:self.textField_Device.text forKey:@"devAddress"];
-        [useDef setObject:self.textField_Port.text  forKey:@"portAddress"];
-        [useDef synchronize];
-    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+    //去除空格 保存
+    self.textField_IP.text=removeTrim(self.textField_IP.text);
+    self.textField_Device.text=removeTrim(self.textField_Device.text);
+    self.textField_MACAddress.text=removeTrim(self.textField_MACAddress.text);
+    self.textField_Port.text=removeTrim(self.textField_Port.text);
+    NSUserDefaults *useDef= [NSUserDefaults standardUserDefaults];
+    [useDef setObject:self.textField_IP.text forKey:@"ipAddress"];
+    [useDef setObject:self.textField_MACAddress.text forKey:@"macAddress"];
+    [useDef setObject:self.textField_Device.text forKey:@"devAddress"];
+    [useDef setObject:self.textField_Port.text  forKey:@"portAddress"];
+    [useDef synchronize];
+    [self.navigationController dismissViewControllerAnimated:NO completion:^{
         [SVProgressHUD showSuccessWithStatus:@"保存成功"];
     }];
 }
 
--(Boolean)validInput:(NSString *)regexMac inputContent:(NSString *)inputContent{    
+-(Boolean)validInput:(NSString *)regexMac inputContent:(NSString *)inputContent{
     NSPredicate *predicateMac = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regexMac];
     BOOL isValidMac= [predicateMac evaluateWithObject:inputContent];
     return isValidMac;

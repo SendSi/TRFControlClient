@@ -7,14 +7,26 @@
 //
 
 #import <UIKit/UIKit.h>
-@class  TRFDevShowModel;
+
+@class TRFDevShowTableViewCell;
+@protocol TRFDevShowTableViewCellDelegate <NSObject>
+
+@optional
+-(void)devShowTableViewCellClickRight:(TRFDevShowTableViewCell *)vc tag:(NSInteger )tag;
+-(void)devShowTableViewCellClickLeftOpen:(TRFDevShowTableViewCell *)vc tag:(NSInteger )tag;
+@end
+
 
 @interface TRFDevShowTableViewCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UILabel *labelName;
-@property (weak, nonatomic) IBOutlet UIButton *buttonPic;
+@property (weak, nonatomic) IBOutlet UIButton *buttonShowLabelName;
+@property (weak, nonatomic) IBOutlet UIButton *buttonClose;
 
-/** <#abs#>  */
-@property (strong,nonatomic) TRFDevShowModel *devModel;
+-(void)loadDataInfo: (NSString *)name tag:(NSInteger )tag state:(NSInteger)state;
 
+- (IBAction)ClickButtonClose:(UIButton *)sender;
+- (IBAction)ClickButtonOpen:(UIButton *)sender;
+
+/** 代理 */
+@property (weak,nonatomic) id<TRFDevShowTableViewCellDelegate> delegateCell;
 
 @end

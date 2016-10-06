@@ -16,8 +16,7 @@
 #import "SVProgressHUD.h"
 #import "AppDelegate.h"
 #import "GDataXMLNode.h"
-
-
+#import "TRFPlayShowController.h"
 
 @interface TRFMainUIViewController ()<TRFShowButtonShowVDelegate,AsyncSocketDelegate>{
     // CommentsCell *cell;
@@ -30,23 +29,25 @@
 /** app.plist 的内容 */
 @property (nonatomic ,strong ) AppDelegate *myDelegate;
 @property (nonatomic ,strong ) TRFDevShowController *devController;
+@property (nonatomic ,strong ) TRFPlayShowController *playController;
 
 @property (nonatomic,strong) NSMutableArray *listname;
 @property (nonatomic,strong) NSMutableArray *listindex;
 @property (nonatomic,strong) NSMutableArray *liststate;
 @property (nonatomic,strong) NSMutableArray *listcmdid;
 @property (nonatomic,strong) NSMutableArray *listdate;
-
+/** nsarray */
+@property (nonatomic ,strong ) NSMutableArray<TRFShowButtonV *> *arrButton;
 @end
 
 @implementation TRFMainUIViewController
 -(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
     UINavigationBar *bar = [self.navigationController navigationBar];
     CGFloat navBarHeight = 80;
     CGRect frame = CGRectMake(0, 0, pchScreenWidth, navBarHeight);
     [bar setFrame:frame];
     
+    [super viewDidAppear:animated];
     AppDelegate *myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     self.myDelegate=myDelegate;
 }
@@ -59,7 +60,6 @@
     self.title=@"主页";
     self.navigationItem.leftBarButtonItem=[UIBarButtonItem initWithBarButtonNorImage:@"titel_lianjie_on" highImage:@"titel_lianjie_on" target:self action:@selector(clickConnection:) ];
     [self validHasKey];/** 验证有无 key   (无key就跳到设置页面)  */
-    [self setButtonShowUI];
 }
 /** 连接 断开 按钮  */
 -(void)clickConnection:(UIButton *)btn{
@@ -108,6 +108,8 @@
     [self.buttonLeft setImage:[UIImage imageNamed:@"titel_lianjie_on.png"] forState:UIControlStateNormal];
     [self.buttonLeft setImage:[UIImage imageNamed:@"titel_lianjie_on.png"] forState:UIControlStateHighlighted];
     [SVProgressHUD showSuccessWithStatus:@"断开中控成功"];
+    
+    [self setShowHideArrButton:YES];
 }
 
 /** 验证有有 key (加载) */
@@ -122,13 +124,16 @@
 -(void)trfClickSetting{
     pchLogClass;
     TRFConnectControl *conn=[[TRFConnectControl alloc] init];
-    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:conn] animated:YES completion:^{
+   UINavigationController *nav= [[UINavigationController alloc] initWithRootViewController:conn];
+    [self.navigationController presentViewController:nav animated:YES completion:^{
+        nav.navigationBar.frame= CGRectMake(0, 0, pchScreenWidth, 80);
     }];
+   // [self.navigationController pushViewController:conn animated:YES];
 }
 /** 设备 按钮 主页*/
 -(void)setButtonShowUI{
-    CGFloat appH=150,appW=150;
-    int totalCol=6;//6列
+    CGFloat appH=120,appW=300;
+    int totalCol=3;//6列
     CGFloat offsetX=(pchScreenWidth-appW*totalCol)/(totalCol+1);//17
     CGFloat offsetY=20;
     NSInteger count=self.appItems.count;
@@ -142,9 +147,25 @@
         NSDictionary *dic= self.appItems[index];
         TRFShowButtonV *buttonTrf=    [TRFShowButtonV initWithShowButton];
         [buttonTrf.buttonShowTitle setTitle:dic[@"name"] forState:UIControlStateNormal];
-        buttonTrf.frame=CGRectMake(appx    , appy, 150, 150);
+        buttonTrf.frame=CGRectMake(appx    , appy, 300, 120);
         buttonTrf.delegate=self;
         [self.view addSubview:buttonTrf];
+        [self.arrButton addObject:buttonTrf];
+    }
+}
+-(NSMutableArray<TRFShowButtonV *> *)arrButton{
+    if(_arrButton==nil){
+        _arrButton=[NSMutableArray<TRFShowButtonV *> array];
+    }
+    return _arrButton;
+}
+
+/** no 为显示   yes为不显示  */
+-(void)setShowHideArrButton:(Boolean) boShow{
+    if(self.arrButton.count>0){
+        for(TRFShowButtonV *trfBtn in self.arrButton ){
+            trfBtn.hidden=boShow;
+        }
     }
 }
 
@@ -165,6 +186,11 @@
         self.devController=vcController;
         [self.navigationController pushViewController:vcController animated:YES];
     }
+    else if([buttonText isEqualToString:@"播放控制"]){
+        TRFPlayShowController *vcController=[[TRFPlayShowController alloc] init];
+        self.playController=vcController;
+        [self.navigationController pushViewController:vcController animated:YES];
+    }
 }
 
 #pragma  - mark 代理 Socket  的代理
@@ -175,6 +201,10 @@
     [self.buttonLeft setImage:[UIImage imageNamed:@"titel_lianjie_off.png"] forState:UIControlStateNormal];
     [self.buttonLeft setImage:[UIImage imageNamed:@"titel_lianjie_off.png"] forState:UIControlStateHighlighted];
     [self.myDelegate.sendSocket readDataWithTimeout: -1 tag: 0];
+    
+    [self setShowHideArrButton:NO];
+    
+    [self setButtonShowUI];
 }
 - (void)onSocket:(AsyncSocket *)sock didWriteDataWithTag:(long)tag
 {
@@ -185,7 +215,7 @@
 - (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
 {
     NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);  NSString *message = [[NSString alloc] initWithData:data encoding:enc];
-    NSLogs(@"这里必须要使用流式数据001 is: \n%@",message);
+    NSLogs(@"流式数据  message  --->         :        %@",message);
     if(self.myDelegate.xmlcacle==nil) self.myDelegate.xmlcacle=@"";
     self.myDelegate.xmlcacle =[self.myDelegate.xmlcacle stringByAppendingString:message];
     if (tag==2) {
@@ -194,6 +224,8 @@
     
     //是否包结尾
     if ([self.myDelegate.xmlcacle hasSuffix:@"</Packet>"]){
+        NSLogs(@"req==res=%@",self.myDelegate.connecttype);
+        
         if ([self.myDelegate.connecttype isEqualToString:@"DeviceQueryReq"]){
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults setObject:self.myDelegate.xmlcacle forKey:@"Devicetablelist"];
@@ -213,17 +245,25 @@
             [self xmlPaserWithXMLDeviceCtrlReq:self.myDelegate.xmlcacle];
         }
         else if ([self.myDelegate.connecttype isEqualToString:@"PlayReq"]){
-            //控制请求
+            //控制请求 播放视频
             [self xmlPaserWithXMLPlayRes:self.myDelegate.xmlcacle];
         }
         else if ([self.myDelegate.connecttype isEqualToString:@"PlayEnd"]){
             return;
         }
-        else if ([self.myDelegate.connecttype isEqualToString:@"DeviceResetReq"])
-        {
+        else if ([self.myDelegate.connecttype isEqualToString:@"PlayStopReq"]){
+            //新加的
+            [SVProgressHUD dismiss];
+        }
+        else if ([self.myDelegate.connecttype isEqualToString:@"PauseReq"]){
+              //新加的
+            [SVProgressHUD dismiss];
+        }
+        else if ([self.myDelegate.connecttype isEqualToString:@"DeviceResetReq"])    {
             // 设备重置请求
             [self xmlParserWithXMLDeviceReset:self.myDelegate.xmlcacle];
         }
+        
         else if ([self.myDelegate.connecttype isEqualToString:@"ShutDown"]){
             //关闭中控
             [self willDisConnect];
@@ -298,7 +338,6 @@
 - (void)xmlPaserWithXMLPlayQueryReq:(NSString *)xml
 {
     GDataXMLDocument *document  = [[GDataXMLDocument alloc] initWithXMLString:xml options:0 error:nil] ;
-    //GDataXMLDocument *rootElement = [document rootElement];
     GDataXMLElement *rootElement = [document rootElement];
     
     NSMutableArray *index =[[NSMutableArray alloc] init];
@@ -308,8 +347,7 @@
     for(GDataXMLElement *element in [rootElement elementsForName:@"Body"])
     {
         for(id ele in [element elementsForName:@"Play"])
-        {
-            
+        {            
             [index addObject:[[[ele elementsForName:@"Index"] objectAtIndex:0] stringValue]];
             [name addObject:[[[ele elementsForName:@"Name"] objectAtIndex:0] stringValue]];
             [state addObject:@"Play"];
@@ -319,6 +357,10 @@
     self.listname = name;
     self.listindex = index;
     self.liststate = state;
+    
+    
+  [self.playController loadInfoArray_listName:self.listname listIndex:self.listindex listState:self.liststate listDate:self.listdate];
+    
 }
 
 - (void)xmlPaserWithXMLDeviceCtrlReq:(NSString *)xml
@@ -344,6 +386,8 @@
                                              otherButtonTitles:nil];
         [alert show];
     }
+    [SVProgressHUD dismiss];
+    NSLogs(@"请求完成--->003");
 }
 
 - (void)xmlPaserWithXMLPlayRes:(NSString *)xml
@@ -351,19 +395,13 @@
     GDataXMLDocument *document  = [[GDataXMLDocument alloc] initWithXMLString:xml options:0 error:nil] ;
     //取出xml的根节点
     GDataXMLElement* rootElement = [document rootElement];
-  
     GDataXMLElement* headElement = [[rootElement elementsForName:@"Header"]objectAtIndex:0];
-    
     //取出某一个具体节点(body节点)
     GDataXMLElement* bodyElement = [[rootElement elementsForName:@"Body"]objectAtIndex:0];
-
     //某个具体节点的文本内容
     NSString* cmdid = [[[headElement elementsForName:@"CmdID"] objectAtIndex:0] stringValue];
-    
     NSString* Result = [[[bodyElement elementsForName:@"Result"] objectAtIndex:0] stringValue];
-
     NSString* Reason = [[[bodyElement elementsForName:@"Reason"] objectAtIndex:0] stringValue];
-
     if ([Result isEqualToString:@"1"])
     {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"系统提示"
@@ -376,12 +414,12 @@
     
     if (([Result isEqualToString:@"0"])&&([cmdid isEqualToString:@"PlayRes"]))
     {
-    ////    playshowviewView.hidden = NO;
+        [SVProgressHUD dismiss];
+        NSLogs(@"播放 影片 在 此 监听了,成功播放了");
     }
     else if (Result==nil &&([cmdid isEqualToString:@"PlayEnd"]))
     {
        self.myDelegate.connecttype=@"PlayEnd";
-       //// playshowviewView.hidden=YES;
     }
 }
 -(void)xmlParserWithXMLDeviceReset:(NSString *)xml
@@ -419,10 +457,7 @@
     GDataXMLDocument *document  = [[GDataXMLDocument alloc] initWithXMLString:xml options:0 error:nil] ;
     //取出xml的根节点
     GDataXMLElement* rootElement = [document rootElement];
-    //取出根节点的所有孩子节点
-    //NSArray* children = [rootElement children];
-    
-    //取出某一个具体节点(body节点)
+       //取出某一个具体节点(body节点)
     GDataXMLElement* bodyElement = [[rootElement elementsForName:@"Body"]objectAtIndex:0];
     
     //某个具体节点的文本内容
