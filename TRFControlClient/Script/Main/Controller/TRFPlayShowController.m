@@ -13,6 +13,7 @@
 #import "AsyncSocket.h"
 #import "TRFPlayingCtrController.h"
 #import "GDataXMLNode.h"
+#import "TRFCommMethod.h"
 
 @interface TRFPlayShowController ()<TRFPlayShowTableViewCellDelegate>
 /** appDelegate   */
@@ -46,27 +47,8 @@
         //播放查询
         [self xmlPaserWithXMLPlayQueryReq:Playtablelist];
     }else{
-        if (! self.myDelegate.connectOK)
-        {
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"系统提示"
-                                                           message:@"请先连接到中控"
-                                                          delegate:self
-                                                 cancelButtonTitle:@"确 定"
-                                                 otherButtonTitles:nil];
-            [alert show];
-        }else{
-            //等待提示
-            //播放查询
-            [SVProgressHUD show];
-            NSString *devStr=[[NSUserDefaults standardUserDefaults] objectForKey:@"devAddress"];
-            NSString *xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>PlayQueryReq</CmdID><From>%@</From></Header></Packet>",devStr];
-            NSData *data = [xmlstr dataUsingEncoding: NSUTF8StringEncoding];
-            
-            if ( self.myDelegate.connectOK)
-            {
-                [ self.myDelegate.sendSocket writeData: data withTimeout: -1 tag: 0];
-            }
-        }
+        //没boby 没index  只是查询
+        [TRFCommMethod asyncCtrPlay:@"PlayQueryReq" indexId:@"" indexLaterStr:@"" indexLaterValue:@""];
     }
 }
 
@@ -76,7 +58,6 @@
 {
     GDataXMLDocument *document  = [[GDataXMLDocument alloc] initWithXMLString:xml options:0 error:nil] ;
     GDataXMLElement *rootElement = [document rootElement];
- 
     NSMutableArray *state =[[NSMutableArray alloc] init];
     
     for(GDataXMLElement *element in [rootElement elementsForName:@"Body"])
@@ -141,36 +122,39 @@
     if(_listIndex==nil){        _listIndex=[NSMutableArray array];    }
     return _listIndex;
 }
-/** 代理   */
+
+/** 代理  点击播放,跳到下一页面 */
 -(void)playShowTableViewCellClickPlay:(TRFPlayShowTableViewCell *)vc tag:(NSInteger)tag strTitle:(NSString *)strTitle{//播放
     TRFPlayingCtrController *playingCtr=[[TRFPlayingCtrController alloc] init];
-    playingCtr.indexId=[NSString stringWithFormat:@"%ld", tag];
+    playingCtr.indexId=[NSString stringWithFormat:@"%ld", (long)tag];
     playingCtr.title=strTitle;
     [self.navigationController pushViewController:playingCtr animated:YES];
 }
-/** 代理   */
+/** 代理  停止播放 */
 -(void)playShowTableViewCellClickStop:(TRFPlayShowTableViewCell *)vc tag:(NSInteger)tag{
-    NSString *strDev=[[NSUserDefaults standardUserDefaults] objectForKey:@"devAddress"];
-    NSString *rowValue = [NSString stringWithFormat:@"%ld",tag];
-    NSString *xmlstr=nil;
-    //等待提示
-    [SVProgressHUD  show];
-    if (([self.myDelegate.connecttype isEqualToString:@"DeviceQueryReq"])||([self.myDelegate.connecttype isEqualToString:@"DeviceCtrlReq"])){
-        self.myDelegate.connecttype= @"DeviceCtrlReq";
-        //设备查询
-        xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>%@</CmdID><From>%@</From></Header><Body><Index>%@</Index><State>0</State></Body></Packet>",self.myDelegate.connecttype,strDev, rowValue];
-    }else {
-        self.myDelegate.connecttype= @"PlayStopReq";
-        //播放请求
-        xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>%@</CmdID><From>%@</From></Header><Body><Index>%@</Index></Body></Packet>",@"PlayStopReq",strDev, rowValue];        
-    }
-    NSData *data = [xmlstr dataUsingEncoding: NSUTF8StringEncoding];
-    //[self connect];
-    if (self.myDelegate.connectOK)
-    {
-        [self.myDelegate.sendSocket writeData: data withTimeout: -1 tag: 0];
-    }
-
+//有点模糊,别删
+// NSString *strDev=[[NSUserDefaults standardUserDefaults] objectForKey:@"devAddress"];
+//  NSString *rowValue = [NSString stringWithFormat:@"%ld",(long)tag];
+//    NSString *xmlstr=nil;
+//    //等待提示
+//    [SVProgressHUD  show];
+//    if (([self.myDelegate.connecttype isEqualToString:@"DeviceQueryReq"])||([self.myDelegate.connecttype isEqualToString:@"DeviceCtrlReq"])){
+//        self.myDelegate.connecttype= @"DeviceCtrlReq";
+//        //设备查询
+//        xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>%@</CmdID><From>%@</From></Header><Body><Index>%@</Index><State>0</State></Body></Packet>",self.myDelegate.connecttype,strDev, rowValue];
+//    }else {
+//        self.myDelegate.connecttype= @"PlayStopReq";
+//        //播放请求
+//        xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>%@</CmdID><From>%@</From></Header><Body><Index>%@</Index></Body></Packet>",@"PlayStopReq",strDev, rowValue];        
+//    }
+//    NSData *data = [xmlstr dataUsingEncoding: NSUTF8StringEncoding];
+//    //[self connect];
+//    if (self.myDelegate.connectOK)
+//    {
+//        [self.myDelegate.sendSocket writeData: data withTimeout: -1 tag: 0];
+//    }
+  NSString *rowValue = [NSString stringWithFormat:@"%ld",(long)tag];
+    [TRFCommMethod asyncCtrPlay:@"PlayStopReq" indexId:rowValue indexLaterStr:@"" indexLaterValue:@""];
 }
 
 

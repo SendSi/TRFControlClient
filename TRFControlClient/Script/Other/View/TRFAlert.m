@@ -39,6 +39,7 @@
 
 - (IBAction)certanClick:(id)sender {
     self.certanBlock();
+        [self removeFromSuperview];
 }
 
 

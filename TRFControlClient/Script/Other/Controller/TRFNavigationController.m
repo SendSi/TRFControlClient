@@ -18,7 +18,7 @@
 {
     if (self.childViewControllers.count > 0) { // 如果push进来的不是第一个控制器
        UIViewController *vc= self.childViewControllers.lastObject;
-        
+        NSLogs(@"vc.title===%@",vc.title);
          UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button setTitle:vc.title forState:UIControlStateNormal];
         [button.titleLabel setFont:[UIFont systemFontOfSize:25]];
@@ -58,6 +58,16 @@
     CGFloat navBarHeight = 80;
     CGRect frame = CGRectMake(0, 0, pchScreenWidth, navBarHeight);
     [bar setFrame:frame];
+}
+
+-(void)viewDidLoad{
+    [super viewDidLoad];
+    UINavigationBar *navb=[UINavigationBar appearance];
+    //设置头部 字体颜色与大小
+    NSMutableDictionary *attr=[NSMutableDictionary dictionary];
+    attr[NSForegroundColorAttributeName]=[UIColor blackColor];
+    attr[NSFontAttributeName]=[UIFont systemFontOfSize:40];
+    [navb setTitleTextAttributes:attr];
 }
 
 

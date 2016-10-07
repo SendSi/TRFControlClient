@@ -14,7 +14,6 @@
 		2D33DE971DA0E5F0009903B8 /* TRFShowButtonV.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D33DE961DA0E5F0009903B8 /* TRFShowButtonV.xib */; };
 		2D33DE9B1DA0F2BA009903B8 /* TRFDevShowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D33DE991DA0F2BA009903B8 /* TRFDevShowController.m */; };
 		2D33DEA91DA107F6009903B8 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D33DEA81DA107F6009903B8 /* AsyncSocket.m */; };
-		2D33DEAF1DA20635009903B8 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D33DEAE1DA20635009903B8 /* GCDAsyncUdpSocket.m */; };
 		2D33DEB41DA22FFE009903B8 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D33DEB31DA22FFE009903B8 /* GDataXMLNode.m */; };
 		2D33DEB71DA23BE1009903B8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D33DEB61DA23BE0009903B8 /* SystemConfiguration.framework */; };
 		2D33DEB91DA23BE7009903B8 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D33DEB81DA23BE7009903B8 /* AVFoundation.framework */; };
@@ -50,6 +49,8 @@
 		2DB788251DA600330035D6A9 /* TRFPlayingCtrController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB788231DA600330035D6A9 /* TRFPlayingCtrController.m */; };
 		2DB788261DA600330035D6A9 /* TRFPlayingCtrController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DB788241DA600330035D6A9 /* TRFPlayingCtrController.xib */; };
 		2DB788291DA6272A0035D6A9 /* TRFNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB788281DA6272A0035D6A9 /* TRFNavigationController.m */; };
+		2DB7882C1DA7316D0035D6A9 /* TRFCommMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB7882B1DA7316D0035D6A9 /* TRFCommMethod.m */; };
+		2DB7882F1DA780240035D6A9 /* AsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB7882E1DA780240035D6A9 /* AsyncUdpSocket.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,8 +82,6 @@
 		2D33DE991DA0F2BA009903B8 /* TRFDevShowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRFDevShowController.m; sourceTree = "<group>"; };
 		2D33DEA71DA107F6009903B8 /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncSocket.h; sourceTree = "<group>"; };
 		2D33DEA81DA107F6009903B8 /* AsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncSocket.m; sourceTree = "<group>"; };
-		2D33DEAD1DA20635009903B8 /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
-		2D33DEAE1DA20635009903B8 /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
 		2D33DEB11DA22FFE009903B8 /* GDataDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataDefines.h; sourceTree = "<group>"; };
 		2D33DEB21DA22FFE009903B8 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
 		2D33DEB31DA22FFE009903B8 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
@@ -142,6 +141,10 @@
 		2DB788241DA600330035D6A9 /* TRFPlayingCtrController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TRFPlayingCtrController.xib; sourceTree = "<group>"; };
 		2DB788271DA6272A0035D6A9 /* TRFNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRFNavigationController.h; sourceTree = "<group>"; };
 		2DB788281DA6272A0035D6A9 /* TRFNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRFNavigationController.m; sourceTree = "<group>"; };
+		2DB7882A1DA7316D0035D6A9 /* TRFCommMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRFCommMethod.h; sourceTree = "<group>"; };
+		2DB7882B1DA7316D0035D6A9 /* TRFCommMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRFCommMethod.m; sourceTree = "<group>"; };
+		2DB7882D1DA780240035D6A9 /* AsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncUdpSocket.h; sourceTree = "<group>"; };
+		2DB7882E1DA780240035D6A9 /* AsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncUdpSocket.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,8 +184,8 @@
 		2D33DEA01DA10652009903B8 /* Async */ = {
 			isa = PBXGroup;
 			children = (
-				2D33DEAD1DA20635009903B8 /* GCDAsyncUdpSocket.h */,
-				2D33DEAE1DA20635009903B8 /* GCDAsyncUdpSocket.m */,
+				2DB7882D1DA780240035D6A9 /* AsyncUdpSocket.h */,
+				2DB7882E1DA780240035D6A9 /* AsyncUdpSocket.m */,
 				2D33DEA71DA107F6009903B8 /* AsyncSocket.h */,
 				2D33DEA81DA107F6009903B8 /* AsyncSocket.m */,
 			);
@@ -263,7 +266,6 @@
 			isa = PBXGroup;
 			children = (
 				2D3B812D1D9F6C180028B3A2 /* Controller */,
-				2D3B812E1D9F6C180028B3A2 /* Model */,
 				2D3B812F1D9F6C180028B3A2 /* View */,
 			);
 			path = Main;
@@ -282,15 +284,10 @@
 				2DB788221DA600330035D6A9 /* TRFPlayingCtrController.h */,
 				2DB788231DA600330035D6A9 /* TRFPlayingCtrController.m */,
 				2DB788241DA600330035D6A9 /* TRFPlayingCtrController.xib */,
+				2DB7882A1DA7316D0035D6A9 /* TRFCommMethod.h */,
+				2DB7882B1DA7316D0035D6A9 /* TRFCommMethod.m */,
 			);
 			path = Controller;
-			sourceTree = "<group>";
-		};
-		2D3B812E1D9F6C180028B3A2 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		2D3B812F1D9F6C180028B3A2 /* View */ = {
@@ -313,7 +310,6 @@
 			isa = PBXGroup;
 			children = (
 				2D3B81311D9F6C180028B3A2 /* Controller */,
-				2D3B81321D9F6C180028B3A2 /* Model */,
 				2D3B81331D9F6C180028B3A2 /* View */,
 			);
 			path = Other;
@@ -329,13 +325,6 @@
 				2DB788281DA6272A0035D6A9 /* TRFNavigationController.m */,
 			);
 			path = Controller;
-			sourceTree = "<group>";
-		};
-		2D3B81321D9F6C180028B3A2 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		2D3B81331D9F6C180028B3A2 /* View */ = {
@@ -555,8 +544,10 @@
 				2D3A85C01D9FBD4C004DF475 /* UIView+vhRectExtension.m in Sources */,
 				2D3B813C1D9F73470028B3A2 /* TRFMainUIViewController.m in Sources */,
 				2D33DE9B1DA0F2BA009903B8 /* TRFDevShowController.m in Sources */,
+				2DB7882F1DA780240035D6A9 /* AsyncUdpSocket.m in Sources */,
 				2D3A85D31DA0B15D004DF475 /* UIBarButtonItem+vhBarButtonTool.m in Sources */,
 				2D3B81411D9F8BBA0028B3A2 /* TRFConnectControl.m in Sources */,
+				2DB7882C1DA7316D0035D6A9 /* TRFCommMethod.m in Sources */,
 				2DB7880C1DA4A4DB0035D6A9 /* Foundation+Log.m in Sources */,
 				2D069B991D9FAC8E00B7BBA1 /* TRFAlert.m in Sources */,
 				2DB7881C1DA5E5940035D6A9 /* TRFPlayShowController.m in Sources */,
@@ -570,7 +561,6 @@
 				2D870B2F1D9F655900FD90E5 /* main.m in Sources */,
 				2D33DEB41DA22FFE009903B8 /* GDataXMLNode.m in Sources */,
 				2D3A85CD1D9FBD50004DF475 /* SVProgressAnimatedView.m in Sources */,
-				2D33DEAF1DA20635009903B8 /* GCDAsyncUdpSocket.m in Sources */,
 				2D33DE951DA0E5E4009903B8 /* TRFShowButtonV.m in Sources */,
 				2D3A85D01D9FBD50004DF475 /* SVRadialGradientLayer.m in Sources */,
 				2DB788101DA4A7E70035D6A9 /* TRFDevShowTableViewCell.m in Sources */,

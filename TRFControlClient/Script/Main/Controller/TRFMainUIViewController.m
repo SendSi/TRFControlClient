@@ -17,6 +17,7 @@
 #import "AppDelegate.h"
 #import "GDataXMLNode.h"
 #import "TRFPlayShowController.h"
+#import "TRFCommMethod.h"
 
 @interface TRFMainUIViewController ()<TRFShowButtonShowVDelegate,AsyncSocketDelegate>{
     // CommentsCell *cell;
@@ -55,9 +56,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //修改NavigaionBar的高度
-    self.navigationItem.rightBarButtonItem=[UIBarButtonItem initWithBarButtonNorImage:@"playback" highImage:@"playback" target:self action:@selector(trfClickSetting)];
-    self.title=@"主页";
+    //修改NavigaionBar的高度  d8sz  trfClickSetting
+    self.navigationItem.rightBarButtonItem=[UIBarButtonItem  initWithBarButtonNorImage:@"d8sz" highImage:@"d8sz" showTitle:nil target:self action:@selector(trfClickSetting)];
+      self.title=@"主页";
+    
     self.navigationItem.leftBarButtonItem=[UIBarButtonItem initWithBarButtonNorImage:@"titel_lianjie_on" highImage:@"titel_lianjie_on" target:self action:@selector(clickConnection:) ];
     [self validHasKey];/** 验证有无 key   (无key就跳到设置页面)  */
 }
@@ -105,8 +107,8 @@
     self.myDelegate.isPlaytablelist=NO;
      self.myDelegate.isDevicetablelist=NO;
     self.myDelegate.sendSocket = nil;
-    [self.buttonLeft setImage:[UIImage imageNamed:@"titel_lianjie_on.png"] forState:UIControlStateNormal];
-    [self.buttonLeft setImage:[UIImage imageNamed:@"titel_lianjie_on.png"] forState:UIControlStateHighlighted];
+    [self.buttonLeft setBackgroundImage:[UIImage imageNamed:@"titel_lianjie_on.png"] forState:UIControlStateNormal];
+    [self.buttonLeft setBackgroundImage:[UIImage imageNamed:@"titel_lianjie_on.png"] forState:UIControlStateHighlighted];
     [SVProgressHUD showSuccessWithStatus:@"断开中控成功"];
     
     [self setShowHideArrButton:YES];
@@ -128,7 +130,7 @@
     [self.navigationController presentViewController:nav animated:YES completion:^{
         nav.navigationBar.frame= CGRectMake(0, 0, pchScreenWidth, 80);
     }];
-   // [self.navigationController pushViewController:conn animated:YES];
+//    [self.navigationController pushViewController:conn animated:YES];
 }
 /** 设备 按钮 主页*/
 -(void)setButtonShowUI{
@@ -137,7 +139,7 @@
     CGFloat offsetX=(pchScreenWidth-appW*totalCol)/(totalCol+1);//17
     CGFloat offsetY=20;
     NSInteger count=self.appItems.count;
-    NSLogs(@"count==%ld,pchScreen==%f",count,pchScreenWidth);
+    NSLogs(@"count==%ld,pchScreen==%f",(long)count,pchScreenWidth);
     for (int index=0; index<count; index++) {
         int rowNumber=index/totalCol;
         int colNumber=index % totalCol;
@@ -198,8 +200,8 @@
 {
     NSLogs(@"代理socket 连接成功%s %d", __FUNCTION__, __LINE__);
     [SVProgressHUD showSuccessWithStatus:@"连接中控成功"];
-    [self.buttonLeft setImage:[UIImage imageNamed:@"titel_lianjie_off.png"] forState:UIControlStateNormal];
-    [self.buttonLeft setImage:[UIImage imageNamed:@"titel_lianjie_off.png"] forState:UIControlStateHighlighted];
+    [self.buttonLeft setBackgroundImage:[UIImage imageNamed:@"titel_lianjie_off.png"] forState:UIControlStateNormal];
+    [self.buttonLeft setBackgroundImage:[UIImage imageNamed:@"titel_lianjie_off.png"] forState:UIControlStateHighlighted];
     [self.myDelegate.sendSocket readDataWithTimeout: -1 tag: 0];
     
     [self setShowHideArrButton:NO];
@@ -249,6 +251,7 @@
             [self xmlPaserWithXMLPlayRes:self.myDelegate.xmlcacle];
         }
         else if ([self.myDelegate.connecttype isEqualToString:@"PlayEnd"]){
+            NSLogs(@"播放完成===============");
             return;
         }
         else if ([self.myDelegate.connecttype isEqualToString:@"PlayStopReq"]){
@@ -259,6 +262,10 @@
               //新加的
             [SVProgressHUD dismiss];
         }
+        else if ([self.myDelegate.connecttype isEqualToString:@"VolCtrReq"]){
+            //新加的
+            [SVProgressHUD dismiss];
+        }
         else if ([self.myDelegate.connecttype isEqualToString:@"DeviceResetReq"])    {
             // 设备重置请求
             [self xmlParserWithXMLDeviceReset:self.myDelegate.xmlcacle];
@@ -267,6 +274,7 @@
         else if ([self.myDelegate.connecttype isEqualToString:@"ShutDown"]){
             //关闭中控
             [self willDisConnect];
+            [SVProgressHUD dismiss];
         }
         else if ([self.myDelegate.connecttype isEqualToString:@"VerifyReq"]){
             //关闭中控
@@ -282,7 +290,7 @@
 - (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:(NSError *)err
 {
     [SVProgressHUD showErrorWithStatus:@"网络错误,连接不到中控"];
-    [self.buttonLeft setImage:[UIImage imageNamed:@"titel_lianjie_on.png"] forState:UIControlStateNormal];
+    [self.buttonLeft setBackgroundImage:[UIImage imageNamed:@"titel_lianjie_on.png"] forState:UIControlStateNormal];
     NSLogs(@"网络错误001-->%s %d, err = %@", __FUNCTION__, __LINE__, err);
    self.myDelegate.connectOK =NO;
 }
@@ -290,8 +298,8 @@
 {
     NSLogs(@"网络错误002-->%s %d", __FUNCTION__, __LINE__);
     [SVProgressHUD showErrorWithStatus:@"网络错误,连接不到中控"];
-    [self.buttonLeft setImage:[UIImage imageNamed:@"titel_lianjie_on.png"] forState:UIControlStateNormal];
-    [self.buttonLeft setImage:[UIImage imageNamed:@"titel_lianjie_on.png"] forState:UIControlStateHighlighted];
+    [self.buttonLeft setBackgroundImage:[UIImage imageNamed:@"titel_lianjie_on.png"] forState:UIControlStateNormal];
+    [self.buttonLeft setBackgroundImage:[UIImage imageNamed:@"titel_lianjie_on.png"] forState:UIControlStateHighlighted];
       self.myDelegate.connectOK =NO;
     self.myDelegate.sendSocket = nil;
 }
@@ -330,7 +338,6 @@
     self.listindex = index;
     self.liststate = state;
     self.listdate=nsdate;
-////   [self.listTableView reloadData] ;
  
     [self.devController loadInfoArray_listName:self.listname listIndex:self.listindex listState:self.liststate listDate:self.listdate];
 }

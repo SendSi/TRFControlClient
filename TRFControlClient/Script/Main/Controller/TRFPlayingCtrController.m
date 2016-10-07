@@ -10,6 +10,7 @@
 #import "SVProgressHUD.h"
 #import "AppDelegate.h"
 #import "AsyncSocket.h"
+#import "TRFCommMethod.h"
 
 @interface TRFPlayingCtrController ()
 /** appDelegate   */
@@ -32,28 +33,9 @@
     
         [self loadAsyncPlay];
 }
+
 -(void)loadAsyncPlay{
-    self.myDelegate.connecttype= @"PlayReq";
-    if (! self.myDelegate.connectOK)
-    {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"系统提示"
-                                                       message:@"请先连接到中控"
-                                                      delegate:self
-                                             cancelButtonTitle:@"确 定"
-                                             otherButtonTitles:nil];
-        [alert show];
-    }else{
-        //等待提示
-        //播放查询
-        [SVProgressHUD show];
-        NSString *devStr=[[NSUserDefaults standardUserDefaults] objectForKey:@"devAddress"];
-        NSString *xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>%@</CmdID><From>%@</From></Header><Body><Index>%@</Index></Body></Packet>",@"PlayReq",devStr,self.indexId];
-        NSData *data = [xmlstr dataUsingEncoding: NSUTF8StringEncoding];        
-        if ( self.myDelegate.connectOK)
-        {
-            [ self.myDelegate.sendSocket writeData: data withTimeout: -1 tag: 0];
-        }
-    }
+    [TRFCommMethod asyncCtrPlay:@"PlayReq" indexId:self.indexId];
 }
 
 
@@ -64,7 +46,7 @@
     self.listState=(NSMutableArray *)listState;
     self.listIndex=(NSMutableArray *)listIndex;
 }
-
+/** 播放与暂停 控制 [按钮] */
 - (IBAction)ClickButtonPause:(UIButton *)sender {
     if([sender.titleLabel.text isEqualToString:@"暂停"])
     {
@@ -75,85 +57,20 @@
                 [sender setTitle:@"暂停" forState:UIControlStateNormal];
         [self loadAsyncPlay];
     }
-
 }
 
-
+/** 暂停 控制  */
 -(void)loadAsyncPause{
-    self.myDelegate.connecttype= @"PauseReq";
-    if (! self.myDelegate.connectOK)
-    {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"系统提示"
-                                                       message:@"请先连接到中控"
-                                                      delegate:self
-                                             cancelButtonTitle:@"确 定"
-                                             otherButtonTitles:nil];
-        [alert show];
-    }else{
-        //等待提示
-        //播放查询
-        [SVProgressHUD show];
-        NSString *devStr=[[NSUserDefaults standardUserDefaults] objectForKey:@"devAddress"];
-        NSString *xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\" ?><Packet><Header><CmdID>%@</CmdID><From>%@</From></Header><Body><Index>%@</Index></Body></Packet>",@"PauseReq",devStr,self.indexId];
-        
-        NSData *data = [xmlstr dataUsingEncoding: NSUTF8StringEncoding];
-        if ( self.myDelegate.connectOK)
-        {
-            [ self.myDelegate.sendSocket writeData: data withTimeout: -1 tag: 0];
-        }
-    }
+    [TRFCommMethod asyncCtrPlay:@"PauseReq" indexId:self.indexId indexLaterStr:@"" indexLaterValue:@""];
 }
 
-
-- (IBAction)ClickButtonVolumn:(UIButton *)sender {
-    self.myDelegate.connecttype= @"VolCtrReq";
-    if (! self.myDelegate.connectOK)
-    {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"系统提示"
-                                                       message:@"请先连接到中控"
-                                                      delegate:self
-                                             cancelButtonTitle:@"确 定"
-                                             otherButtonTitles:nil];
-        [alert show];
-    }else{
-        //等待提示
-        //播放查询
-        [SVProgressHUD show];
-        NSString *devStr=[[NSUserDefaults standardUserDefaults] objectForKey:@"devAddress"];
-        NSString *xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\" ?><Packet><Header><CmdID>%@</CmdID><From>%@</From></Header><Body><Index>%@</Index><Volume>100</Volume></Body></Packet>",@"VolCtrReq",devStr,self.indexId];
-        NSData *data = [xmlstr dataUsingEncoding: NSUTF8StringEncoding];
-        if ( self.myDelegate.connectOK)
-        {
-            [ self.myDelegate.sendSocket writeData: data withTimeout: -1 tag: 0];
-        }
-    }
-
+/** 音量 控制 [滑动条] */
+- (IBAction)MoveSlider:(UISlider *)sender {
+    sender.continuous=NO;
+  NSString *strValue=[NSString stringWithFormat:@"%f",sender.value *100]  ;
+    [TRFCommMethod asyncCtrPlay:@"VolCtrReq" indexId:self.indexId indexLaterStr:@"<Volume>" indexLaterValue:strValue];
 }
 
-- (IBAction)ClickButtonVolumnRemove:(UIButton *)sender {
-    self.myDelegate.connecttype= @"VolCtrReq";
-    if (! self.myDelegate.connectOK)
-    {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"系统提示"
-                                                       message:@"请先连接到中控"
-                                                      delegate:self
-                                             cancelButtonTitle:@"确 定"
-                                             otherButtonTitles:nil];
-        [alert show];
-    }else{
-        //等待提示
-        //播放查询
-        [SVProgressHUD show];
-        NSString *devStr=[[NSUserDefaults standardUserDefaults] objectForKey:@"devAddress"];
-        NSString *xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\" ?><Packet><Header><CmdID>%@</CmdID><From>%@</From></Header><Body><Index>%@</Index><Volume>2</Volume></Body></Packet>",@"VolCtrReq",devStr,self.indexId];
-        NSData *data = [xmlstr dataUsingEncoding: NSUTF8StringEncoding];
-        if ( self.myDelegate.connectOK)
-        {
-            [ self.myDelegate.sendSocket writeData: data withTimeout: -1 tag: 0];
-        }
-    }
-
-}
 
 
 

@@ -24,21 +24,17 @@
                         <action selector="ClickButtonPause:" destination="-1" eventType="touchUpInside" id="YWg-wF-0xv"/>
                     </connections>
                 </button>
+                <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="4cj-6z-0qS">
+                    <frame key="frameInset" minX="85" minY="277" width="276" height="31"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <connections>
+                        <action selector="MoveSlider:" destination="-1" eventType="valueChanged" id="ygu-77-iUE"/>
+                    </connections>
+                </slider>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u41-IP-Zur">
-                    <frame key="frameInset" minX="170" minY="145" width="123" height="30"/>
+                    <frame key="frameInset" minX="24" minY="250" width="123" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" title="音量"/>
-                    <connections>
-                        <action selector="ClickButtonVolumn:" destination="-1" eventType="touchUpInside" id="bBU-Qs-X9m"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zp5-xI-kdM">
-                    <frame key="frameInset" minX="218" minY="214" width="46" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="音量-"/>
-                    <connections>
-                        <action selector="ClickButtonVolumnRemove:" destination="-1" eventType="touchUpInside" id="yeE-I3-i1c"/>
-                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

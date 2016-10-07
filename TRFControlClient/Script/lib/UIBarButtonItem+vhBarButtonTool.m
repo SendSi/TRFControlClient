@@ -12,10 +12,10 @@
 /** uibarButtonItem的创建  只有图片*/
 +(instancetype)initWithBarButtonNorImage:(NSString *)norImage highImage:(NSString *)highImage target:(id)target action:(SEL) action{
     UIButton *button=[[UIButton alloc] init];
-    [button setImage:[UIImage imageNamed:norImage] forState:UIControlStateNormal];
-    [button setImage:[UIImage imageNamed:highImage] forState:UIControlStateHighlighted];
+    [button setBackgroundImage:[UIImage imageNamed:norImage] forState:UIControlStateNormal];
+    [button setBackgroundImage:[UIImage imageNamed:highImage] forState:UIControlStateHighlighted]; 
 
-    button.size=CGSizeMake(100, 60);
+    button.size=CGSizeMake(100, 40);
     [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     return [[self alloc] initWithCustomView:button];
 }
@@ -25,9 +25,10 @@
 +(instancetype)initWithBarButtonNorImage:(NSString *)norImage highImage:(NSString *)highImage showTitle:(NSString *)showTitle target:(id)target action:(SEL) action{
     UIButton *button=[[UIButton alloc] init];
     [button setTitle:showTitle forState:UIControlStateNormal];
-    [button setImage:[UIImage imageNamed:norImage] forState:UIControlStateNormal];
-    [button setImage:[UIImage imageNamed:highImage] forState:UIControlStateHighlighted];
-    button.size=button.currentImage.size;
+    [button setBackgroundImage:[UIImage imageNamed:norImage] forState:UIControlStateNormal];
+    [button setBackgroundImage:[UIImage imageNamed:highImage] forState:UIControlStateHighlighted];
+//    button.size=button.currentBackgroundImage.size;
+      button.size=CGSizeMake(45,45);
     [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     return [[self alloc] initWithCustomView:button];
 }
@@ -36,7 +37,7 @@
 +(instancetype)initWithBarButtonNorTitle:(NSString *)norTitle target:(id)target action:(SEL) action{
     UIButton *button=[[UIButton alloc] init];
     [button setTitle:norTitle forState:UIControlStateNormal];
-    [button.titleLabel setFont:[UIFont systemFontOfSize:14]];
+    [button.titleLabel setFont:[UIFont systemFontOfSize:28]];
     [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     [button sizeToFit];

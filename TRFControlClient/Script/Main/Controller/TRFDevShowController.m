@@ -12,6 +12,7 @@
 #import "GDataXMLNode.h"
 #import "TRFDevShowTableViewCell.h"
 #import "AsyncSocket.h"
+#import "TRFCommMethod.h"
 
 @interface TRFDevShowController ()<UITableViewDelegate,UITableViewDataSource,TRFDevShowTableViewCellDelegate>
 /** appDelegate   */
@@ -58,29 +59,7 @@
         [self xmlPaserWithXMLDeviceQueryReq:Devicetablelist];
     }
     else{
-        if (!self.myDelegate.connectOK)
-        {
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"系统提示"
-                                                           message:@"请先连接到中控"
-                                                          delegate:self
-                                                 cancelButtonTitle:@"确 定"
-                                                 otherButtonTitles:nil];
-            [alert show];
-        }
-        else
-        {
-            //等待提示
-            [SVProgressHUD show];
-            //设备查询
-            NSString *devAddress=[[NSUserDefaults standardUserDefaults] objectForKey:@"devAddress"];
-            NSString *xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>DeviceQueryReq</CmdID><From>%@</From></Header><Body><Index>0</Index></Body></Packet>",devAddress];
-            NSData *data = [xmlstr dataUsingEncoding: NSUTF8StringEncoding];
-        
-            if (self.myDelegate.connectOK)
-            {
-                [self.myDelegate.sendSocket writeData: data withTimeout: -1 tag: 0];
-            }
-        }
+        [TRFCommMethod asyncCtrPlay:@"DeviceQueryReq" indexId:@"0" indexLaterStr:@"" indexLaterValue:@""];
     }
 }
 
@@ -147,34 +126,17 @@
 
 
 #pragma  mark - cell 里面的 代理
--(void)devShowTableViewCellClickRight:(TRFDevShowTableViewCell *)vc tag:(NSInteger)tag{//right也就关闭 按钮
-    NSString *rowValue = [NSString stringWithFormat:@"%ld",tag];
-    NSString *xmlstr=nil;
-    NSString *devStr=[[NSUserDefaults standardUserDefaults] objectForKey:@"devAddress"];
-    //等待提示
-    [SVProgressHUD show];
-    if (([self.myDelegate.connecttype isEqualToString:@"DeviceQueryReq"])||([self.myDelegate.connecttype isEqualToString:@"DeviceCtrlReq"])){
-        self.myDelegate.connecttype= @"DeviceCtrlReq";
-        //设备查询
-        xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>%@</CmdID><From>%@</From></Header><Body><Index>%@</Index><State>0</State></Body></Packet>",self.myDelegate.connecttype,devStr, rowValue];
-    }else {
-       self.myDelegate.connecttype= @"PlayReq";
-        //播放请求
-        xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>%@</CmdID><From>%@</From></Header><Body><Index>%@</Index></Body></Packet>",@"PlayStopReq",devStr, rowValue];
-        
-    }
-    NSData *data = [xmlstr dataUsingEncoding: NSUTF8StringEncoding];
-    // [xmlstr release];
-    
-    if (self.myDelegate.connectOK)
-    {
-        [self.myDelegate.sendSocket writeData: data withTimeout: -1 tag: 0];
-    }
-}
-
 -(void)devShowTableViewCellClickLeftOpen:(TRFDevShowTableViewCell *)vc tag:(NSInteger)tag{
     pchLogClass;
+    [TRFCommMethod asyncSelectHasCtr:tag ifType1:@"DeviceQueryReq" ifType2:@"DeviceCtrlReq" ifType3:@"PlayReq" elseReq:@"PlayReq" state:@"1"];
 }
+
+/** right也就关闭 [按钮]  */
+-(void)devShowTableViewCellClickRight:(TRFDevShowTableViewCell *)vc tag:(NSInteger)tag{//right也就关闭 按钮
+    [TRFCommMethod asyncSelectHasCtr:tag ifType1:@"DeviceQueryReq" ifType2:@"DeviceCtrlReq" ifType3:@"PlayReq" elseReq:@"PlayStopReq" state:@"0"];
+}
+
+
 
 
 
@@ -183,11 +145,51 @@
 
 
 
+/** 关闭  */
+//    NSString *rowValue = [NSString stringWithFormat:@"%ld",(long)tag];
+//    NSString *xmlstr=nil;
+//    NSString *devStr=[[NSUserDefaults standardUserDefaults] objectForKey:@"devAddress"];
+//    //等待提示
+//    [SVProgressHUD show];
+//    if (([self.myDelegate.connecttype isEqualToString:@"DeviceQueryReq"])||([self.myDelegate.connecttype isEqualToString:@"DeviceCtrlReq"])){
+//        self.myDelegate.connecttype= @"DeviceCtrlReq";
+//        //设备查询
+//        xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>%@</CmdID><From>%@</From></Header><Body><Index>%@</Index><State>0</State></Body></Packet>",self.myDelegate.connecttype,devStr, rowValue];
+//    }else {
+//       self.myDelegate.connecttype= @"PlayReq";
+//        //播放请求
+//        xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>%@</CmdID><From>%@</From></Header><Body><Index>%@</Index></Body></Packet>",@"PlayStopReq",devStr, rowValue];
+//    }
+//    NSData *data = [xmlstr dataUsingEncoding: NSUTF8StringEncoding];
+//    if (self.myDelegate.connectOK)
+//    {
+//        [self.myDelegate.sendSocket writeData: data withTimeout: -1 tag: 0];
+//    }
 
 
-
-
-
+/** 关启  */
+//           NSString *devStr=[[NSUserDefaults standardUserDefaults] objectForKey:@"devAddress"];
+//            NSString *rowValue = [NSString stringWithFormat:@"%ld",(long)tag];
+//            NSString *xmlstr=nil;
+//            //等待提示
+//             [SVProgressHUD show];
+//
+//            if (([self.myDelegate.connecttype isEqualToString:@"DeviceQueryReq"])||([self.myDelegate.connecttype isEqualToString:@"DeviceCtrlReq"])){
+//                self.myDelegate.connecttype= @"DeviceCtrlReq";
+//                //设备查询
+//                xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>%@</CmdID><From>%@</From></Header><Body><Index>%@</Index><State>1</State></Body></Packet>",self.myDelegate.connecttype,devStr, rowValue];
+//            }
+//            else {
+//                self.myDelegate.connecttype= @"PlayReq";
+//                //播放请求
+//                xmlstr = [[NSString alloc] initWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><Packet><Header><CmdID>%@</CmdID><From>%@</From></Header><Body><Index>%@</Index></Body></Packet>",@"PlayReq",devStr,rowValue];
+//            }
+//            NSData *data = [xmlstr dataUsingEncoding: NSUTF8StringEncoding];
+//
+//            if (self.myDelegate.connectOK)
+//            {
+//                [self.myDelegate.sendSocket writeData: data withTimeout: -1 tag: 0];
+//            }
 
 
 

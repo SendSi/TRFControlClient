@@ -10,9 +10,11 @@
 #import "TRFAlert.h"
 #import "SVProgressHUD.h"
 #import "UIBarButtonItem+vhBarButtonTool.h"
+#import "TRFCommMethod.h"
+#import "AsyncUdpSocket.h"
 
-@interface TRFConnectControl ()<UITextFieldDelegate>
-
+@interface TRFConnectControl ()<UITextFieldDelegate,AsyncUdpSocketDelegate>
+@property (nonatomic, retain) AsyncUdpSocket *udpSocket;
 @end
 
 @implementation TRFConnectControl
@@ -22,19 +24,11 @@
         CGFloat navBarHeight = 80;
         CGRect frame = CGRectMake(0, 0, pchScreenWidth, navBarHeight);
         [bar setFrame:frame];
-    
     [super viewWillAppear:animated];
     self.title =@"设置";
-    self.navigationItem.leftBarButtonItem=[UIBarButtonItem initWithBarButtonNorTitle:@"取消" titleColor:[UIColor blackColor] target:self action:@selector(Click_Cancel)];
-    
     [self getUserDefaultsInfo];//NSUserDefaults
 }
 
--(void)Click_Cancel{
-    [self dismissViewControllerAnimated:NO completion:^{
-        pchLogClass;
-    }];
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -55,14 +49,61 @@
     TRFAlert *quit=[TRFAlert exitLoginViewWithWarnTitle:@"你确定要关机吗?"];
     [self.view addSubview:quit];
     quit.certanBlock=^{
-        NSLogs(@"关机");
-        //will 写 成功代码
+        [TRFCommMethod asyncCtrPlay:@"ShutDown" indexId:@""];
     };
     NSLogs(@"关机中");
 }
 /** 开机 点击事件  */
 -(void)clickOpenCom{
-    
+//NSString *macAddress= self
+    if (12 == self.textField_MACAddress.text.length)  // mac地址长度为12个字节的字符串
+    {
+        // 组装唤醒包
+        Byte arrPacket[102]; // = (Byte *)[102];
+        int iIndex = 0;
+        for (int i = 0; i < 6; i++){
+            arrPacket[iIndex++] = 0xFF;
+        }
+
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < self.textField_MACAddress.text.length; )
+            {
+                NSString* pTmp = [self.textField_MACAddress.text substringWithRange:NSMakeRange(j, 2)];
+                arrPacket[iIndex++] = (Byte)strtol([pTmp UTF8String], 0, 16);
+                j += 2;
+            }
+        }
+        if (nil == self.udpSocket)
+        {
+            _udpSocket = [[AsyncUdpSocket alloc]initWithDelegate:self];
+            // 启用广播
+            [_udpSocket  enableBroadcast:YES error:nil];
+        }
+        NSTimeInterval timeout = 5000;
+        NSData* pSend = [[NSData alloc]initWithBytes:arrPacket length:102];
+
+
+        BOOL res = [self.udpSocket sendData:pSend toHost:@"255.255.255.255" port:2304 withTimeout:timeout tag:1];
+        if (!res)
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"提示"
+                                                            message: @"开机指令发送失败！"
+                                                           delegate: self
+                                                  cancelButtonTitle: @"取消"
+                                                  otherButtonTitles: nil];
+            [alert show];
+   
+        }
+    }
+    else
+    {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"系统提示"
+                                                       message:@"请填写正确的中控MAC地址，长度为12。"
+                                                      delegate:self
+                                             cancelButtonTitle:@"确 定"
+                                             otherButtonTitles:nil];
+        [alert show];
+    }
 }
 /** 保存 点击事件  */
 -(void)clickSaveInfo{
@@ -141,6 +182,36 @@
     self.textField_IP.text=[useDef objectForKey:@"ipAddress"];
 }
 
+
+#pragma mark - udp 代理
+//************************UDP***************************
+- (void)onUdpSocket:(AsyncUdpSocket *)sock didSendDataWithTag:(long)tag
+{
+    NSLog(@"代理Udp 0%s %d,tag=%ld", __FUNCTION__, __LINE__, tag);
+}
+- (void)onUdpSocket:(AsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error
+{
+    NSLog(@"代理Udp 1%s %d", __FUNCTION__, __LINE__);
+}
+
+- (BOOL)onUdpSocket:(AsyncUdpSocket *)sock didReceiveData:(NSData *)data withTag:(long)tag fromHost:(NSString *)host port:(UInt16)port
+{
+    NSString *s = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding] ;
+    NSLog(@"代理Udp 2didReceiveData, host = %@, tag = %ld, s = %@", host, tag, s);
+    
+    return NO;
+}
+
+- (void)onUdpSocket:(AsyncUdpSocket *)sock didNotReceiveDataWithTag:(long)tag dueToError:(NSError *)error
+{
+    NSLog(@"代理Udp 3%s %d", __FUNCTION__, __LINE__);
+}
+
+
+- (void)onUdpSocketDidClose:(AsyncUdpSocket *)sock
+{
+    NSLog(@"代理Udp 4 %s %d", __FUNCTION__, __LINE__);
+}
 
 @end
 

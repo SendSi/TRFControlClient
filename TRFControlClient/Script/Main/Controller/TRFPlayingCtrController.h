@@ -13,7 +13,6 @@
 @property (copy,nonatomic) NSString *indexId;
 -(void)loadInfoArray_listName:(NSArray *)listName listIndex:(NSArray *)listIndex listState:(NSArray *)listState listDate:(NSArray *)listDate;
 - (IBAction)ClickButtonPause:(UIButton *)sender;
-- (IBAction)ClickButtonVolumn:(UIButton *)sender;
-- (IBAction)ClickButtonVolumnRemove:(UIButton *)sender;
+- (IBAction)MoveSlider:(UISlider *)sender;
 
 @end
