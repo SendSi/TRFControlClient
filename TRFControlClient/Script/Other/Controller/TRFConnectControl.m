@@ -14,7 +14,7 @@
 #import "AsyncUdpSocket.h"
 
 @interface TRFConnectControl ()<UITextFieldDelegate,AsyncUdpSocketDelegate>
-@property (nonatomic, retain) AsyncUdpSocket *udpSocket;
+@property (nonatomic, strong) AsyncUdpSocket *udpSocket;
 @end
 
 @implementation TRFConnectControl
@@ -55,7 +55,6 @@
 }
 /** 开机 点击事件  */
 -(void)clickOpenCom{
-//NSString *macAddress= self
     if (12 == self.textField_MACAddress.text.length)  // mac地址长度为12个字节的字符串
     {
         // 组装唤醒包
@@ -81,7 +80,6 @@
         }
         NSTimeInterval timeout = 5000;
         NSData* pSend = [[NSData alloc]initWithBytes:arrPacket length:102];
-
 
         BOOL res = [self.udpSocket sendData:pSend toHost:@"255.255.255.255" port:2304 withTimeout:timeout tag:1];
         if (!res)
@@ -191,7 +189,7 @@
 }
 - (void)onUdpSocket:(AsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error
 {
-    NSLog(@"代理Udp 1%s %d", __FUNCTION__, __LINE__);
+    NSLog(@"代理Udp 1%s %d error==%@", __FUNCTION__, __LINE__,error);
 }
 
 - (BOOL)onUdpSocket:(AsyncUdpSocket *)sock didReceiveData:(NSData *)data withTag:(long)tag fromHost:(NSString *)host port:(UInt16)port

@@ -20,7 +20,6 @@
 #import "TRFCommMethod.h"
 
 @interface TRFMainUIViewController ()<TRFShowButtonShowVDelegate,AsyncSocketDelegate>{
-    // CommentsCell *cell;
     
 }
 /** app.plist 的内容 */

@@ -6,16 +6,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "TRFControlClient/Script/lib/Async/AsyncUdpSocket.m"
-            timestampString = "497516952.226902"
+            filePath = "TRFControlClient/Script/Other/Controller/TRFConnectControl.m"
+            timestampString = "497524479.495327"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2175"
-            endingLineNumber = "2175"
-            landmarkName = "-doReceive:"
+            startingLineNumber = "61"
+            endingLineNumber = "61"
+            landmarkName = "-clickOpenCom"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

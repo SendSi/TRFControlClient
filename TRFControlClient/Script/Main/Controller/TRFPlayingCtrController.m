@@ -30,8 +30,10 @@
     self.myDelegate=myDelegate;
     self.view.backgroundColor=pchColor(16, 17, 18);
     [super viewDidLoad];
+     [self loadAsyncPlay];
     
-        [self loadAsyncPlay];
+    UIColor *colorBG=[UIColor colorWithPatternImage:[UIImage imageNamed:@"playbg"]];
+    self.view.backgroundColor=colorBG;
 }
 
 -(void)loadAsyncPlay{
